@@ -1,142 +1,173 @@
 <template>
-  <div class="search-component">
-    <div class="search-area">
-      <h1 class="title is-1">GitHub Repository Search</h1>
+  <div>
+    <header class="bottom-gap">
+      <!-- 検索フィールド -->
+      <h2 class="title is-2">GitHub Repository Search</h2>
       <b-field grouped>
-        <b-input placeholder="Search..." type="search" v-model="search" expanded></b-input>
+        <b-input placeholder="Search..." type="search" v-model="searchStr" expanded></b-input>
         <p class="control">
           <button
-            class="button is-primary"
+            v-bind:class="{ 'is-loading': isLoading }"
+            class="button is-info"
             type="submit"
-            v-bind:disabled="!search || this.isProcessing"
+            v-bind:disabled="!searchStr || isLoading"
             v-on:click="searchRepo"
           >Search</button>
         </p>
       </b-field>
-    </div>
-    <div class="search-result-area">
-      <h1 class="title is-1" v-if="results.length && !notFound">Results</h1>
-      <p v-if="notFound">Not Found</p>
-      <article class="media" v-for="(result, index) in results" v-bind:key="index">
-        <figure class="media-left">
-          <p class="image is-64x64">
-            <img v-if="result.owner.avatar_url" v-bind:src="result.owner.avatar_url">
-          </p>
-        </figure>
+    </header>
+    <main>
+      <!-- 検索結果表示 -->
+      <h1 class="title is-2" v-if="results.length">Results</h1>
+      <b-notification v-if="isNotFound" class>Not Found.</b-notification>
+      <article class="media bottom-gap" v-for="(result, index) in results" v-bind:key="index">
+        <p class="media-left image is-64x64">
+          <img v-if="result.owner.avatar_url" v-bind:src="result.owner.avatar_url">
+        </p>
         <div class="media-content">
           <div class="content">
-            <h3 class="title is-3" v-if="result">{{result.full_name}}</h3>
+            <p v-if="result">
+              <a
+                class="title is-3"
+                v-bind:href="result.html_url"
+                target="_blank"
+              >{{result.full_name}}</a>
+            </p>
             <span v-if="result">{{result.description}}</span>
           </div>
         </div>
       </article>
-      <div class="columns is-centered">
-        <a
-          v-show="isMore"
-          v-bind:disabled="this.isProcessing"
-          v-on:click.prevent.stop="showMoreResults"
-        >More...</a>
-      </div>
-    </div>
+      <!-- 検索結果ページングボタン -->
+      <nav class="level-item has-text-centered">
+        <button
+          type="button"
+          v-bind:class="{ 'is-loading': isLoading }"
+          class="button is-text is-large more-button bottom-gap"
+          v-show="results.length && isResultsMore"
+          v-bind:disabled="isLoading"
+          v-on:click="showMoreResults"
+        >More...</button>
+      </nav>
+      <!-- エラーメッセージ -->
+      <section v-if="error">
+        <b-notification type="is-danger">{{error}}</b-notification>
+      </section>
+    </main>
   </div>
 </template>
 <script>
 const searchRepoUrl = "https://api.github.com/search/repositories";
+const errorMessage =
+  "An error occurred during communication. Please reload the page or check the communication environment";
 export default {
   data() {
     return {
-      search: "",
+      searchStr: "",
       results: [],
-      link: "",
+      totalCount: 0,
+      linkStr: "",
       urls: {},
-      notFound: false,
-      isMore: false,
-      isProcessing: false
+      isLoading: false,
+      isNotFound: false,
+      error: null
     };
   },
+  watch: {
+    results() {
+      this.$nextTick(() => {
+        this.isLoading = false;
+        if (this.totalCount) {
+          this.isNotFound = false;
+        }
+      });
+    }
+  },
+  computed: {
+    /**
+     * 追加検索結果があるかどうか判定する
+     * @return {boolean}
+     */
+    isResultsMore: function() {
+      if (this.results.length === this.totalCount) {
+        return false;
+      }
+      return true;
+    }
+  },
   methods: {
+    /**
+     * 通信開始時に初期化する
+     */
+    initState() {
+      this.isLoading = true;
+      this.error = null;
+      this.isNotFound = false;
+    },
+    /**
+     * リポジトリの検索結果を取得する
+     */
     searchRepo() {
-      // 通信処理開始
-      this.processing();
+      this.initState();
       this.$axios
-        .get(`${searchRepoUrl}?q=${this.search}`)
+        .get(`${searchRepoUrl}?q=${this.searchStr}`)
         .then(res => {
-          console.log(res);
-          // 検索結果が0件であることを表示する
-          if (!res.data.items.length) {
-            this.showNotFoundResult();
+          this.results = res.data.items;
+          this.totalCount = res.data.total_count;
+          // 検索結果が0件
+          if (!this.totalCount) {
+            this.isNotFound = true;
             return;
           }
 
-          this.notFound = false;
-          this.results = res.data.items;
           // 検索結果が30件以上存在する場合、ページング可能にする
           if (res.headers.link) {
-            this.link = res.headers.link;
+            this.linkStr = res.headers.link;
             this.parseLinks();
-            this.more();
           }
-          // 処理完了
-          this.standby();
         })
         .catch(err => {
           console.error(err);
-          this.standby();
+          this.error = errorMessage;
+          this.isLoading = false;
         });
     },
-    processing() {
-      this.isProcessing = true;
-    },
-    standby() {
-      this.isProcessing = false;
-    },
-    more() {
-      this.isMore = true;
-    },
-    last() {
-      this.isMore = false;
-    },
-    showNotFoundResult() {
-      this.notFound = true;
-      this.results = [];
-      this.standby();
-      this.last();
-    },
+    /**
+     * 次の検索結果を表示する
+     */
     showMoreResults() {
-      this.parseLinks();
       this.fetchNextResults(this.urls.next);
     },
+    /**
+     * 次の検索結果を取得する
+     * @param {String} url 検索ページングURL
+     */
     fetchNextResults(url) {
-      // 通信処理開始
-      this.processing();
+      this.initState();
       this.$axios
         .get(url)
         .then(res => {
-          console.log(res);
           // 検索結果を追加して表示する
           this.results.push(...res.data.items);
-          this.link = res.headers.link;
+          this.linkStr = res.headers.link;
           this.parseLinks();
-          // 検索結果をすべて表示した場合、ページングを終了する
-          if (this.urls.next === this.urls.last) {
-            this.last();
-          }
-          // 処理完了
-          this.standby();
         })
         .catch(err => {
           console.error(err);
-          this.standby();
+          this.error = errorMessage;
+          this.isLoading = false;
         });
     },
+    /**
+     * 検索時のページングURLをパースする
+     */
     parseLinks() {
-      const links = this.link.split(",");
-      const urls = {};
+      const links = this.linkStr.split(",");
+      let urls = {};
       links.forEach(link => {
         const section = link.split(";");
         const url = section[0].replace(/<(.*)>/, "$1").trim();
-        const name = section[1].replace(/rel="(.*)"/, "$1").trim();
-        urls[name] = url;
+        const type = section[1].replace(/rel="(.*)"/, "$1").trim();
+        urls[type] = url;
       });
       this.urls = urls;
     }
@@ -144,5 +175,25 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+a,
+a:visited {
+  color: #3273dc;
+  text-decoration: underline;
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+.more-button {
+  color: #3273dc;
+  &:hover {
+    color: #3273dc;
+    background: white;
+  }
+}
+
+.bottom-gap {
+  margin-bottom: 2rem;
+}
 </style>
 
