@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "buefy": "0.7.3",
-    "vue": "2.6.10"
+    "vue": "2.6.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "3.5.3",
@@ -24,6 +24,6 @@
     "sass": "1.17.3",
     "sass-loader": "7.1.0",
     "vue-cli-plugin-axios": "0.0.4",
-    "vue-template-compiler": "2.6.10"
+    "vue-template-compiler": "2.6.11"
   }
 }
