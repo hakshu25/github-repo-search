@@ -1,16 +1,5 @@
 {
   "extends": [
-    "config:base"
-  ],
-  "timezone": "Asia/Tokyo",
-  "schedule": ["every weekend"],
-  "assignees": ["flyhighair"],
-  "labels": ["renovate"],
-  "patch": { "automerge": true },
-  "packageRules": [
-    {
-      "depTypeList": ["devDependencies"],
-      "automerge": true
-    }
+    "@flyhighair"
   ]
 }
