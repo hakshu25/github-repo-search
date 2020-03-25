@@ -73,6 +73,8 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
+
 const searchRepoUrl = 'https://api.github.com/search/repositories';
 const errorMessage =
   'An error occurred during communication. Please reload the page or check the communication environment';
@@ -105,10 +107,11 @@ export default {
      * @return {boolean}
      */
     isResultsMore: function () {
-      if (this.results.length === this.totalCount) {
-        return false;
+      if (this.results.length < this.totalCount) {
+        return true;
       }
-      return true;
+
+      return false;
     },
   },
   methods: {
@@ -123,9 +126,9 @@ export default {
     /**
      * リポジトリの検索結果を取得する
      */
-    searchRepo() {
+    async searchRepo() {
       this.initState();
-      this.$axios
+      await axios
         .get(`${searchRepoUrl}?q=${this.searchStr}`)
         .then((res) => {
           this.results = res.data.items;
@@ -136,8 +139,8 @@ export default {
             return;
           }
 
-          // 検索結果が30件以上存在する場合、ページング可能にする
-          if (res.headers.link) {
+          // 検索結果が30件を超える場合、ページング可能にする
+          if (this.totalCount > 30 && res.headers.link) {
             this.linkStr = res.headers.link;
             this.parseLinks();
           }
@@ -158,9 +161,9 @@ export default {
      * 次の検索結果を取得する
      * @param {String} url 検索ページングURL
      */
-    fetchNextResults(url) {
+    async fetchNextResults(url) {
       this.initState();
-      this.$axios
+      await axios
         .get(url)
         .then((res) => {
           // 検索結果を追加して表示する
