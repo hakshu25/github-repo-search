@@ -12,6 +12,7 @@
         ></b-input>
         <p class="control">
           <button
+            id="search-btn"
             v-bind:class="{ 'is-loading': isLoading }"
             class="button is-info"
             type="submit"
@@ -26,7 +27,9 @@
     <main>
       <!-- 検索結果表示 -->
       <h1 class="title is-2" v-if="results.length">Results</h1>
-      <b-notification v-if="isNotFound" class>Not Found.</b-notification>
+      <b-notification id="not-found" v-if="isNotFound">
+        Not Found.
+      </b-notification>
       <article
         class="media bottom-gap"
         v-for="(result, index) in results"
@@ -34,6 +37,7 @@
       >
         <p class="media-left image is-64x64">
           <img
+            id="avatar-image"
             v-if="result.owner.avatar_url"
             v-bind:src="result.owner.avatar_url"
           />
@@ -42,13 +46,14 @@
           <div class="content">
             <p v-if="result">
               <a
+                id="repo-name"
                 class="title is-3"
                 v-bind:href="result.html_url"
                 target="_blank"
                 >{{ result.full_name }}</a
               >
             </p>
-            <span v-if="result">{{ result.description }}</span>
+            <span id="description" v-if="result">{{ result.description }}</span>
           </div>
         </div>
       </article>
@@ -56,6 +61,7 @@
       <nav class="level-item has-text-centered">
         <button
           type="button"
+          id="more-results-btn"
           v-bind:class="{ 'is-loading': isLoading }"
           class="button is-text is-large more-button bottom-gap"
           v-show="results.length && isResultsMore"
@@ -66,7 +72,7 @@
         </button>
       </nav>
       <!-- エラーメッセージ -->
-      <section v-if="error">
+      <section id="error" v-if="error">
         <b-notification type="is-danger">{{ error }}</b-notification>
       </section>
     </main>
@@ -78,6 +84,7 @@ import axios from 'axios';
 const searchRepoUrl = 'https://api.github.com/search/repositories';
 const errorMessage =
   'An error occurred during communication. Please reload the page or check the communication environment';
+
 export default {
   data() {
     return {
