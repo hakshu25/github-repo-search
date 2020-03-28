@@ -1,29 +1,13 @@
 <template>
   <div>
-    <header class="bottom-gap">
-      <!-- 検索フィールド -->
+    <div class="bottom-gap">
       <h2 class="title is-2">GitHub Repository Search</h2>
-      <b-field grouped>
-        <b-input
-          placeholder="Search..."
-          type="search"
-          v-model="searchStr"
-          expanded
-        ></b-input>
-        <p class="control">
-          <button
-            id="search-btn"
-            v-bind:class="{ 'is-loading': isLoading }"
-            class="button is-info"
-            type="submit"
-            v-bind:disabled="!searchStr || isLoading"
-            v-on:click="searchRepo"
-          >
-            Search
-          </button>
-        </p>
-      </b-field>
-    </header>
+      <SearchField
+        v-bind:is-loading="isLoading"
+        v-on:search-repo="searchRepo($event)"
+      >
+      </SearchField>
+    </div>
     <main>
       <!-- 検索結果表示 -->
       <h1 class="title is-2" v-if="results.length">Results</h1>
@@ -80,15 +64,18 @@
 </template>
 <script>
 import axios from 'axios';
+import SearchField from './SearchField.vue';
 
 const searchRepoUrl = 'https://api.github.com/search/repositories';
 const errorMessage =
   'An error occurred during communication. Please reload the page or check the communication environment';
 
 export default {
+  components: {
+    SearchField,
+  },
   data() {
     return {
-      searchStr: '',
       results: [],
       totalCount: 0,
       linkStr: '',
@@ -133,10 +120,10 @@ export default {
     /**
      * リポジトリの検索結果を取得する
      */
-    async searchRepo() {
+    async searchRepo(searchStr) {
       this.initState();
       await axios
-        .get(`${searchRepoUrl}?q=${this.searchStr}`)
+        .get(`${searchRepoUrl}?q=${searchStr}`)
         .then((res) => {
           this.results = res.data.items;
           this.totalCount = res.data.total_count;

@@ -13,44 +13,6 @@ describe('Search.vue', () => {
 
   describe('template logic', () => {
     describe('loading', () => {
-      describe('search button', () => {
-        describe('If isLoading is true', () => {
-          let button;
-
-          beforeEach(async () => {
-            wrapper.setData({ isLoading: true, searchStr: 'TEST' });
-            await wrapper.vm.$forceUpdate();
-            button = wrapper.find('#search-btn');
-          });
-
-          it('there is class is-loading of button', () => {
-            expect(button.classes()).toContain('is-loading');
-          });
-
-          it('disable button', () => {
-            expect(button.attributes().disabled).toBe('disabled');
-          });
-        });
-
-        describe('If isLoading is false', () => {
-          let button;
-
-          beforeEach(async () => {
-            wrapper.setData({ isLoading: false, searchStr: 'TEST' });
-            await wrapper.vm.$forceUpdate();
-            button = wrapper.find('#search-btn');
-          });
-
-          it('there is not class is-loading of button', () => {
-            expect(button.classes()).not.toContain('is-loading');
-          });
-
-          it('enable button', () => {
-            expect(button.attributes().disabled).toBeUndefined();
-          });
-        });
-      });
-
       describe('more button', () => {
         const result = {
           owner: {},
@@ -281,7 +243,7 @@ describe('Search.vue', () => {
         };
         axios.get.mockImplementation(() => Promise.resolve(data));
 
-        await wrapper.vm.searchRepo();
+        await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.results).toEqual([item]);
         expect(wrapper.vm.$data.totalCount).toEqual(1);
@@ -301,7 +263,7 @@ describe('Search.vue', () => {
         };
         axios.get.mockImplementation(() => Promise.resolve(data));
 
-        await wrapper.vm.searchRepo();
+        await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.results).toEqual([]);
         expect(wrapper.vm.$data.totalCount).toEqual(0);
@@ -330,7 +292,7 @@ describe('Search.vue', () => {
         };
         axios.get.mockImplementation(() => Promise.resolve(data));
 
-        await wrapper.vm.searchRepo();
+        await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.totalCount).toEqual(31);
         expect(wrapper.vm.$data.linkStr).toEqual(data.headers.link);
@@ -358,7 +320,7 @@ describe('Search.vue', () => {
         };
         axios.get.mockImplementation(() => Promise.resolve(data));
 
-        await wrapper.vm.searchRepo();
+        await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.totalCount).toEqual(30);
         expect(wrapper.vm.$data.linkStr).toEqual('');
@@ -368,7 +330,7 @@ describe('Search.vue', () => {
       it('Set error message when error occurred', async () => {
         axios.get.mockImplementation(() => Promise.reject('ERROR MESSAGE'));
 
-        await wrapper.vm.searchRepo();
+        await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.isLoading).toBeFalsy();
         expect(wrapper.vm.$data.error).not.toBeNull();
