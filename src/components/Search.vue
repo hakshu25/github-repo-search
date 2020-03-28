@@ -8,63 +8,20 @@
       >
       </SearchField>
     </div>
-    <main>
-      <!-- 検索結果表示 -->
-      <h1 class="title is-2" v-if="results.length">Results</h1>
-      <b-notification id="not-found" v-if="isNotFound">
-        Not Found.
-      </b-notification>
-      <article
-        class="media bottom-gap"
-        v-for="(result, index) in results"
-        v-bind:key="index"
-      >
-        <p class="media-left image is-64x64">
-          <img
-            id="avatar-image"
-            v-if="result.owner.avatar_url"
-            v-bind:src="result.owner.avatar_url"
-          />
-        </p>
-        <div class="media-content">
-          <div class="content">
-            <p v-if="result">
-              <a
-                id="repo-name"
-                class="title is-3"
-                v-bind:href="result.html_url"
-                target="_blank"
-                >{{ result.full_name }}</a
-              >
-            </p>
-            <span id="description" v-if="result">{{ result.description }}</span>
-          </div>
-        </div>
-      </article>
-      <!-- 検索結果ページングボタン -->
-      <nav class="level-item has-text-centered">
-        <button
-          type="button"
-          id="more-results-btn"
-          v-bind:class="{ 'is-loading': isLoading }"
-          class="button is-text is-large more-button bottom-gap"
-          v-show="results.length && isResultsMore"
-          v-bind:disabled="isLoading"
-          v-on:click="showMoreResults"
-        >
-          More...
-        </button>
-      </nav>
-      <!-- エラーメッセージ -->
-      <section id="error" v-if="error">
-        <b-notification type="is-danger">{{ error }}</b-notification>
-      </section>
-    </main>
+    <SearchResultList
+      v-bind:is-loading="isLoading"
+      v-bind:is-not-found="isNotFound"
+      v-bind:results="results"
+      v-bind:total-count="totalCount"
+      v-bind:error="error"
+      v-on:show-more="showMoreResults"
+    ></SearchResultList>
   </div>
 </template>
 <script>
 import axios from 'axios';
 import SearchField from './SearchField.vue';
+import SearchResultList from './SearchResultList.vue';
 
 const searchRepoUrl = 'https://api.github.com/search/repositories';
 const errorMessage =
@@ -73,6 +30,7 @@ const errorMessage =
 export default {
   components: {
     SearchField,
+    SearchResultList,
   },
   data() {
     return {
@@ -93,19 +51,6 @@ export default {
           this.isNotFound = false;
         }
       });
-    },
-  },
-  computed: {
-    /**
-     * 追加検索結果があるかどうか判定する
-     * @return {boolean}
-     */
-    isResultsMore: function () {
-      if (this.results.length < this.totalCount) {
-        return true;
-      }
-
-      return false;
     },
   },
   methods: {
@@ -189,23 +134,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-a,
-a:visited {
-  color: #3273dc;
-  text-decoration: underline;
-  &:hover {
-    opacity: 0.75;
-  }
-}
-
-.more-button {
-  color: #3273dc;
-  &:hover {
-    color: #3273dc;
-    background: white;
-  }
-}
-
 .bottom-gap {
   margin-bottom: 2rem;
 }
