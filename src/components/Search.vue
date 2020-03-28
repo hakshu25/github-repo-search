@@ -12,6 +12,7 @@
         ></b-input>
         <p class="control">
           <button
+            id="search-btn"
             v-bind:class="{ 'is-loading': isLoading }"
             class="button is-info"
             type="submit"
@@ -26,7 +27,9 @@
     <main>
       <!-- 検索結果表示 -->
       <h1 class="title is-2" v-if="results.length">Results</h1>
-      <b-notification v-if="isNotFound" class>Not Found.</b-notification>
+      <b-notification id="not-found" v-if="isNotFound">
+        Not Found.
+      </b-notification>
       <article
         class="media bottom-gap"
         v-for="(result, index) in results"
@@ -34,6 +37,7 @@
       >
         <p class="media-left image is-64x64">
           <img
+            id="avatar-image"
             v-if="result.owner.avatar_url"
             v-bind:src="result.owner.avatar_url"
           />
@@ -42,13 +46,14 @@
           <div class="content">
             <p v-if="result">
               <a
+                id="repo-name"
                 class="title is-3"
                 v-bind:href="result.html_url"
                 target="_blank"
                 >{{ result.full_name }}</a
               >
             </p>
-            <span v-if="result">{{ result.description }}</span>
+            <span id="description" v-if="result">{{ result.description }}</span>
           </div>
         </div>
       </article>
@@ -56,6 +61,7 @@
       <nav class="level-item has-text-centered">
         <button
           type="button"
+          id="more-results-btn"
           v-bind:class="{ 'is-loading': isLoading }"
           class="button is-text is-large more-button bottom-gap"
           v-show="results.length && isResultsMore"
@@ -66,16 +72,19 @@
         </button>
       </nav>
       <!-- エラーメッセージ -->
-      <section v-if="error">
+      <section id="error" v-if="error">
         <b-notification type="is-danger">{{ error }}</b-notification>
       </section>
     </main>
   </div>
 </template>
 <script>
+import axios from 'axios';
+
 const searchRepoUrl = 'https://api.github.com/search/repositories';
 const errorMessage =
   'An error occurred during communication. Please reload the page or check the communication environment';
+
 export default {
   data() {
     return {
@@ -105,10 +114,11 @@ export default {
      * @return {boolean}
      */
     isResultsMore: function () {
-      if (this.results.length === this.totalCount) {
-        return false;
+      if (this.results.length < this.totalCount) {
+        return true;
       }
-      return true;
+
+      return false;
     },
   },
   methods: {
@@ -123,9 +133,9 @@ export default {
     /**
      * リポジトリの検索結果を取得する
      */
-    searchRepo() {
+    async searchRepo() {
       this.initState();
-      this.$axios
+      await axios
         .get(`${searchRepoUrl}?q=${this.searchStr}`)
         .then((res) => {
           this.results = res.data.items;
@@ -136,8 +146,8 @@ export default {
             return;
           }
 
-          // 検索結果が30件以上存在する場合、ページング可能にする
-          if (res.headers.link) {
+          // 検索結果が30件を超える場合、ページング可能にする
+          if (this.totalCount > 30 && res.headers.link) {
             this.linkStr = res.headers.link;
             this.parseLinks();
           }
@@ -158,9 +168,9 @@ export default {
      * 次の検索結果を取得する
      * @param {String} url 検索ページングURL
      */
-    fetchNextResults(url) {
+    async fetchNextResults(url) {
       this.initState();
-      this.$axios
+      await axios
         .get(url)
         .then((res) => {
           // 検索結果を追加して表示する
