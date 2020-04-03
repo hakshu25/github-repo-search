@@ -1,14 +1,14 @@
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
-import Search from '@/components/Search.vue';
+import SearchPage from '@/components/SearchPage.vue';
 
 jest.mock('axios');
 
-describe('Search.vue', () => {
+describe('SearchPage.vue', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(Search);
+    wrapper = shallowMount(SearchPage);
   });
 
   describe('methods', () => {
