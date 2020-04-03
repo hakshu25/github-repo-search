@@ -83,61 +83,6 @@ describe('SearchResultList.vue', () => {
       });
     });
 
-    describe('search results', () => {
-      describe('There are results', () => {
-        beforeEach(() => {
-          wrapper = shallowMount(SearchResultList, {
-            propsData: {
-              results: [
-                {
-                  owner: {
-                    avatar_url: 'avatar',
-                  },
-                  html_url: 'html_url',
-                  full_name: 'sample/repo',
-                  description: 'desc',
-                },
-              ],
-            },
-          });
-        });
-
-        it('show avatar image', () => {
-          expect(wrapper.find('#avatar-image').exists()).toBeTruthy();
-        });
-
-        it('show repository name', () => {
-          expect(wrapper.find('#repo-name').text()).toBe('sample/repo');
-        });
-
-        it('show repository description', () => {
-          expect(wrapper.find('#description').text()).toBe('desc');
-        });
-      });
-
-      describe('There are no results', () => {
-        beforeEach(() => {
-          wrapper = shallowMount(SearchResultList, {
-            propsData: {
-              results: [],
-            },
-          });
-        });
-
-        it('Do not show avatar image', () => {
-          expect(wrapper.find('#avatar-image').exists()).toBeFalsy();
-        });
-
-        it('Do not show repository name', () => {
-          expect(wrapper.find('#repo-name').exists()).toBeFalsy();
-        });
-
-        it('Do not show repository description', () => {
-          expect(wrapper.find('#description').exists()).toBeFalsy();
-        });
-      });
-    });
-
     describe('not found message', () => {
       describe('There are no results', () => {
         beforeEach(() => {

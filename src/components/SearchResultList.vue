@@ -4,33 +4,13 @@
     <b-notification id="not-found" v-if="isNotFound">
       Not Found.
     </b-notification>
-    <article
+    <SearchResultListItem
       class="media bottom-gap"
       v-for="(result, index) in results"
       v-bind:key="index"
+      v-bind:result="result"
     >
-      <p class="media-left image is-64x64">
-        <img
-          id="avatar-image"
-          v-if="result.owner.avatar_url"
-          v-bind:src="result.owner.avatar_url"
-        />
-      </p>
-      <div class="media-content">
-        <div class="content">
-          <p v-if="result">
-            <a
-              id="repo-name"
-              class="title is-3"
-              v-bind:href="result.html_url"
-              target="_blank"
-              >{{ result.full_name }}</a
-            >
-          </p>
-          <span id="description" v-if="result">{{ result.description }}</span>
-        </div>
-      </div>
-    </article>
+    </SearchResultListItem>
     <nav class="level-item has-text-centered">
       <button
         type="button"
@@ -50,7 +30,12 @@
   </div>
 </template>
 <script>
+import SearchResultListItem from './SearchResultListItem.vue';
+
 export default {
+  components: {
+    SearchResultListItem,
+  },
   props: {
     isLoading: Boolean,
     isNotFound: Boolean,
