@@ -2,11 +2,7 @@
   <div>
     <div class="bottom-gap">
       <h2 class="title is-2">GitHub Repository Search</h2>
-      <SearchField
-        v-bind:is-loading="isLoading"
-        v-on:search-repo="searchRepo($event)"
-      >
-      </SearchField>
+      <SearchField v-bind:is-loading="isLoading" v-on:search-repo="searchRepo($event)"></SearchField>
     </div>
     <SearchResultList
       v-bind:is-loading="isLoading"
@@ -22,6 +18,7 @@
 import axios from 'axios';
 import SearchField from './SearchField.vue';
 import SearchResultList from './SearchResultList.vue';
+import { parseLinks } from '../helpers/util';
 
 const searchRepoUrl = 'https://api.github.com/search/repositories';
 const errorMessage =
@@ -36,7 +33,6 @@ export default {
     return {
       results: [],
       totalCount: 0,
-      linkStr: '',
       urls: {},
       isLoading: false,
       isNotFound: false,
@@ -80,8 +76,7 @@ export default {
 
           // 検索結果が30件を超える場合、ページング可能にする
           if (this.totalCount > 30 && res.headers.link) {
-            this.linkStr = res.headers.link;
-            this.parseLinks();
+            this.parseLinks(res.headers.link);
           }
         })
         .catch((err) => {
@@ -107,8 +102,7 @@ export default {
         .then((res) => {
           // 検索結果を追加して表示する
           this.results.push(...res.data.items);
-          this.linkStr = res.headers.link;
-          this.parseLinks();
+          this.parseLinks(res.headers.link);
         })
         .catch((err) => {
           console.error(err);
@@ -116,19 +110,8 @@ export default {
           this.isLoading = false;
         });
     },
-    /**
-     * 検索時のページングURLをパースする
-     */
-    parseLinks() {
-      const links = this.linkStr.split(',');
-      let urls = {};
-      links.forEach((link) => {
-        const section = link.split(';');
-        const url = section[0].replace(/<(.*)>/, '$1').trim();
-        const type = section[1].replace(/rel="(.*)"/, '$1').trim();
-        urls[type] = url;
-      });
-      this.urls = urls;
+    parseLinks(linkStr) {
+      this.urls = parseLinks(linkStr);
     },
   },
 };
