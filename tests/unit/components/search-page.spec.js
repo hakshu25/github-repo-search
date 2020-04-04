@@ -47,7 +47,6 @@ describe('SearchPage.vue', () => {
 
         expect(wrapper.vm.$data.results).toEqual([item]);
         expect(wrapper.vm.$data.totalCount).toEqual(1);
-        expect(wrapper.vm.$data.linkStr).toEqual('');
         expect(wrapper.vm.$data.isLoading).toBeFalsy();
         expect(wrapper.vm.$data.error).toBeNull();
         expect(wrapper.vm.$data.isNotFound).toBeFalsy();
@@ -67,7 +66,6 @@ describe('SearchPage.vue', () => {
 
         expect(wrapper.vm.$data.results).toEqual([]);
         expect(wrapper.vm.$data.totalCount).toEqual(0);
-        expect(wrapper.vm.$data.linkStr).toEqual('');
         expect(wrapper.vm.$data.isLoading).toBeFalsy();
         expect(wrapper.vm.$data.error).toBeNull();
         expect(wrapper.vm.$data.isNotFound).toBeTruthy();
@@ -95,7 +93,6 @@ describe('SearchPage.vue', () => {
         await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.totalCount).toEqual(31);
-        expect(wrapper.vm.$data.linkStr).toEqual(data.headers.link);
         expect(wrapper.vm.$data.urls).toEqual({
           next: 'http://example.com?page=2',
           last: 'http://example.com?page=3',
@@ -123,7 +120,6 @@ describe('SearchPage.vue', () => {
         await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.totalCount).toEqual(30);
-        expect(wrapper.vm.$data.linkStr).toEqual('');
         expect(wrapper.vm.$data.urls).toEqual({});
       });
 
@@ -183,7 +179,6 @@ describe('SearchPage.vue', () => {
         await wrapper.vm.fetchNextResults('url');
 
         expect(wrapper.vm.$data.results).toEqual([oldItem, item]);
-        expect(wrapper.vm.$data.linkStr).toEqual(data.headers.link);
         expect(wrapper.vm.$data.urls).toEqual({
           next: 'http://example.com?page=2',
           last: 'http://example.com?page=3',
@@ -204,7 +199,7 @@ describe('SearchPage.vue', () => {
     });
 
     describe('parseLinks()', () => {
-      it('Parse link into object property according to rel', () => {
+      it('Set urls by link string', () => {
         const linkStr =
           '<http://example.com?page=2>; rel="next", <http://example.com?page=3>; rel="last"';
         wrapper.vm.$data.linkStr = linkStr;
@@ -213,7 +208,7 @@ describe('SearchPage.vue', () => {
           last: 'http://example.com?page=3',
         };
 
-        wrapper.vm.parseLinks();
+        wrapper.vm.parseLinks(linkStr);
 
         expect(wrapper.vm.$data.urls).toEqual(expected);
       });
