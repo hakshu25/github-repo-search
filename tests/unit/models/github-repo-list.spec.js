@@ -26,12 +26,18 @@ describe('GithubRepoList', () => {
         headers: {},
       };
       axios.get.mockImplementation(() => Promise.resolve(data));
+      spyOn(githubRepoList.listChanged, 'execute');
+      spyOn(githubRepoList.totalCountChanged, 'execute');
+      spyOn(githubRepoList.errorChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
       expect(githubRepoList.all).toEqual([item]);
       expect(githubRepoList.totalCount).toBe(1);
       expect(githubRepoList.error).toBeNull();
+      expect(githubRepoList.listChanged.execute).toHaveBeenCalled();
+      expect(githubRepoList.totalCountChanged.execute).toHaveBeenCalled();
+      expect(githubRepoList.errorChanged.execute).not.toHaveBeenCalled();
     });
 
     it('Set paging link if there is next link', async () => {
@@ -52,11 +58,15 @@ describe('GithubRepoList', () => {
         },
       };
       axios.get.mockImplementation(() => Promise.resolve(data));
+      spyOn(githubRepoList.totalCountChanged, 'execute');
+      spyOn(githubRepoList.nextUrlChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
       expect(githubRepoList.totalCount).toBe(31);
       expect(githubRepoList.nextUrl).toBe('http://example.com?page=2');
+      expect(githubRepoList.totalCountChanged.execute).toHaveBeenCalled();
+      expect(githubRepoList.nextUrlChanged.execute).toHaveBeenCalled();
     });
 
     it('Does not set paging link if there are no next items', async () => {
@@ -76,19 +86,25 @@ describe('GithubRepoList', () => {
         },
       };
       axios.get.mockImplementation(() => Promise.resolve(data));
+      spyOn(githubRepoList.totalCountChanged, 'execute');
+      spyOn(githubRepoList.nextUrlChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
       expect(githubRepoList.totalCount).toBe(30);
       expect(githubRepoList.nextUrl).toEqual(undefined);
+      expect(githubRepoList.totalCountChanged.execute).toHaveBeenCalled();
+      expect(githubRepoList.nextUrlChanged.execute).not.toHaveBeenCalled();
     });
 
     it('Set error message when error occurred', async () => {
       axios.get.mockImplementation(() => Promise.reject('ERROR MESSAGE'));
+      spyOn(githubRepoList.errorChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
       expect(githubRepoList.error).toBe('ERROR MESSAGE');
+      expect(githubRepoList.errorChanged.execute).toHaveBeenCalled();
     });
   });
 
@@ -128,20 +144,28 @@ describe('GithubRepoList', () => {
       axios.get.mockImplementation(() => Promise.resolve(oldData));
       await githubRepoList.fetchByKeyword('');
       axios.get.mockImplementation(() => Promise.resolve(data));
+      spyOn(githubRepoList.listChanged, 'execute');
+      spyOn(githubRepoList.nextUrlChanged, 'execute');
+      spyOn(githubRepoList.errorChanged, 'execute');
 
       await githubRepoList.fetchNext();
 
       expect(githubRepoList.all).toEqual([oldItem, item]);
       expect(githubRepoList.nextUrl).toEqual('http://example.com?page=2');
       expect(githubRepoList.error).toBeNull();
+      expect(githubRepoList.listChanged.execute).toHaveBeenCalled();
+      expect(githubRepoList.nextUrlChanged.execute).toHaveBeenCalled();
+      expect(githubRepoList.errorChanged.execute).not.toHaveBeenCalled();
     });
 
     it('Set error message when error occurred', async () => {
       axios.get.mockImplementation(() => Promise.reject('ERROR MESSAGE'));
+      spyOn(githubRepoList.errorChanged, 'execute');
 
       await githubRepoList.fetchNext();
 
       expect(githubRepoList.error).toBe('ERROR MESSAGE');
+      expect(githubRepoList.errorChanged.execute).toHaveBeenCalled();
     });
   });
 });
