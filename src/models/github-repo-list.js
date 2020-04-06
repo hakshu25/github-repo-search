@@ -18,6 +18,7 @@ export default class GithubRepoList {
   }
 
   async fetchByKeyword(searchKeyword) {
+    this._error = null;
     const requestUrl = `${apiUrl}?q=${searchKeyword}`;
     await axios
       .get(requestUrl)

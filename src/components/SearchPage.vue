@@ -18,9 +18,8 @@
 import axios from 'axios';
 import SearchField from './SearchField.vue';
 import SearchResultList from './SearchResultList.vue';
-import { parseLinks } from '../helpers/util';
+import GithubRepoList from '../models/github-repo-list';
 
-const searchRepoUrl = 'https://api.github.com/search/repositories';
 const errorMessage =
   'An error occurred during communication. Please reload the page or check the communication environment';
 
@@ -29,14 +28,29 @@ export default {
     SearchField,
     SearchResultList,
   },
+  beforeCreate() {
+    this.model = new GithubRepoList();
+    this.model.listChanged.observe(() => {
+      this.results = this.model.all;
+    });
+    this.model.totalCountChanged.observe(() => {
+      this.totalCount = this.model.totalCount;
+    });
+    this.model.nextUrlChanged.observe(() => {
+      this.nextUrl = this.model.nextUrl;
+    });
+    this.model.errorChanged.observe(() => {
+      this.error = this.model.error;
+    });
+  },
   data() {
     return {
-      results: [],
-      totalCount: 0,
-      urls: {},
+      results: this.model.all,
+      totalCount: this.model.totalCount,
+      nextUrl: this.model.nextUrl,
       isLoading: false,
       isNotFound: false,
-      error: null,
+      error: this.model.error,
     };
   },
   watch: {
@@ -45,7 +59,14 @@ export default {
         this.isLoading = false;
         if (this.totalCount) {
           this.isNotFound = false;
+        } else {
+          this.isNotFound = true;
         }
+      });
+    },
+    error() {
+      this.$nextTick(() => {
+        this.isLoading = false;
       });
     },
   },
@@ -55,7 +76,6 @@ export default {
      */
     initState() {
       this.isLoading = true;
-      this.error = null;
       this.isNotFound = false;
     },
     /**
@@ -63,55 +83,14 @@ export default {
      */
     async searchRepo(searchStr) {
       this.initState();
-      await axios
-        .get(`${searchRepoUrl}?q=${searchStr}`)
-        .then((res) => {
-          this.results = res.data.items;
-          this.totalCount = res.data.total_count;
-          // 検索結果が0件
-          if (!this.totalCount) {
-            this.isNotFound = true;
-            return;
-          }
-
-          // 検索結果が30件を超える場合、ページング可能にする
-          if (this.totalCount > 30 && res.headers.link) {
-            this.parseLinks(res.headers.link);
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          this.error = errorMessage;
-          this.isLoading = false;
-        });
+      await this.model.fetchByKeyword(searchStr);
     },
     /**
      * 次の検索結果を表示する
      */
     showMoreResults() {
-      this.fetchNextResults(this.urls.next);
-    },
-    /**
-     * 次の検索結果を取得する
-     * @param {String} url 検索ページングURL
-     */
-    async fetchNextResults(url) {
       this.initState();
-      await axios
-        .get(url)
-        .then((res) => {
-          // 検索結果を追加して表示する
-          this.results.push(...res.data.items);
-          this.parseLinks(res.headers.link);
-        })
-        .catch((err) => {
-          console.error(err);
-          this.error = errorMessage;
-          this.isLoading = false;
-        });
-    },
-    parseLinks(linkStr) {
-      this.urls = parseLinks(linkStr);
+      this.model.fetchNext();
     },
   },
 };

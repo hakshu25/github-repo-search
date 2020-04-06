@@ -15,13 +15,11 @@ describe('SearchPage.vue', () => {
     describe('initState()', () => {
       it('Set to initial state', () => {
         wrapper.vm.$data.isLoading = false;
-        wrapper.vm.$data.error = 'ERROR';
         wrapper.vm.$data.isNotFound = true;
 
         wrapper.vm.initState();
 
         expect(wrapper.vm.$data.isLoading).toBeTruthy();
-        expect(wrapper.vm.$data.error).toBeNull();
         expect(wrapper.vm.$data.isNotFound).toBeFalsy();
       });
     });
@@ -64,7 +62,7 @@ describe('SearchPage.vue', () => {
 
         await wrapper.vm.searchRepo('');
 
-        expect(wrapper.vm.$data.results).toEqual([]);
+        expect(wrapper.vm.$data.nextUrl).toBeUndefined();
         expect(wrapper.vm.$data.totalCount).toEqual(0);
         expect(wrapper.vm.$data.isLoading).toBeFalsy();
         expect(wrapper.vm.$data.error).toBeNull();
@@ -93,10 +91,7 @@ describe('SearchPage.vue', () => {
         await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.totalCount).toEqual(31);
-        expect(wrapper.vm.$data.urls).toEqual({
-          next: 'http://example.com?page=2',
-          last: 'http://example.com?page=3',
-        });
+        expect(wrapper.vm.$data.nextUrl).toEqual('http://example.com?page=2');
       });
 
       it('Does not set paging link if there are no next items', async () => {
@@ -120,7 +115,7 @@ describe('SearchPage.vue', () => {
         await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.totalCount).toEqual(30);
-        expect(wrapper.vm.$data.urls).toEqual({});
+        expect(wrapper.vm.$data.nextUrl).toBeUndefined();
       });
 
       it('Set error message when error occurred', async () => {
@@ -135,82 +130,13 @@ describe('SearchPage.vue', () => {
 
     describe('showMoreResults()', () => {
       it('Call the method that displays the next search result', () => {
-        const urls = {
-          next: 'sampleUrl',
-        };
-        wrapper.vm.$data.urls = urls;
         const spy = jest
-          .spyOn(wrapper.vm, 'fetchNextResults')
+          .spyOn(wrapper.vm.model, 'fetchNext')
           .mockImplementation();
 
         wrapper.vm.showMoreResults();
 
-        expect(spy).toHaveBeenCalledWith('sampleUrl');
-      });
-    });
-
-    describe('fetchNextResults()', () => {
-      it('Add result to results', async () => {
-        const oldItem = {
-          owner: {},
-          html_url: 'old',
-          full_name: 'old item',
-          description: 'old',
-        };
-        const item = {
-          owner: {},
-          html_url: '',
-          full_name: '',
-          description: '',
-        };
-        const data = {
-          data: {
-            items: [item],
-            total_count: 2,
-          },
-          headers: {
-            link:
-              '<http://example.com?page=2>; rel="next", <http://example.com?page=3>; rel="last"',
-          },
-        };
-        axios.get.mockImplementation(() => Promise.resolve(data));
-        wrapper.vm.$data.results = [oldItem];
-
-        await wrapper.vm.fetchNextResults('url');
-
-        expect(wrapper.vm.$data.results).toEqual([oldItem, item]);
-        expect(wrapper.vm.$data.urls).toEqual({
-          next: 'http://example.com?page=2',
-          last: 'http://example.com?page=3',
-        });
-        expect(wrapper.vm.$data.isLoading).toBeFalsy();
-        expect(wrapper.vm.$data.error).toBeNull();
-        expect(wrapper.vm.$data.isNotFound).toBeFalsy();
-      });
-
-      it('Set error message when error occurred', async () => {
-        axios.get.mockImplementation(() => Promise.reject('ERROR MESSAGE'));
-
-        await wrapper.vm.fetchNextResults('url');
-
-        expect(wrapper.vm.$data.isLoading).toBeFalsy();
-        expect(wrapper.vm.$data.error).not.toBeNull();
-      });
-    });
-
-    describe('parseLinks()', () => {
-      it('Set urls by link string', () => {
-        const linkStr =
-          '<http://example.com?page=2>; rel="next", <http://example.com?page=3>; rel="last"';
-        wrapper.vm.$data.linkStr = linkStr;
-        const expected = {
-          next: 'http://example.com?page=2',
-          last: 'http://example.com?page=3',
-        };
-
-        wrapper.vm.parseLinks(linkStr);
-
-        expect(wrapper.vm.$data.urls).toEqual(expected);
+        expect(spy).toHaveBeenCalled();
       });
     });
   });
