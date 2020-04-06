@@ -15,13 +15,9 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
 import SearchField from './SearchField.vue';
 import SearchResultList from './SearchResultList.vue';
 import GithubRepoList from '../models/github-repo-list';
-
-const errorMessage =
-  'An error occurred during communication. Please reload the page or check the communication environment';
 
 export default {
   components: {
@@ -48,49 +44,45 @@ export default {
       results: this.model.all,
       totalCount: this.model.totalCount,
       nextUrl: this.model.nextUrl,
+      error: this.model.error,
       isLoading: false,
       isNotFound: false,
-      error: this.model.error,
     };
   },
   watch: {
     results() {
       this.$nextTick(() => {
-        this.isLoading = false;
-        if (this.totalCount) {
-          this.isNotFound = false;
-        } else {
-          this.isNotFound = true;
-        }
+        this.hideLoading();
+        this.setNotFound();
       });
     },
     error() {
       this.$nextTick(() => {
-        this.isLoading = false;
+        this.hideLoading();
       });
     },
   },
   methods: {
-    /**
-     * 通信開始時に初期化する
-     */
-    initState() {
-      this.isLoading = true;
-      this.isNotFound = false;
-    },
-    /**
-     * リポジトリの検索結果を取得する
-     */
     async searchRepo(searchStr) {
-      this.initState();
+      this.showLoading();
       await this.model.fetchByKeyword(searchStr);
     },
-    /**
-     * 次の検索結果を表示する
-     */
     showMoreResults() {
-      this.initState();
+      this.showLoading();
       this.model.fetchNext();
+    },
+    showLoading() {
+      this.isLoading = true;
+    },
+    hideLoading() {
+      this.isLoading = false;
+    },
+    setNotFound() {
+      if (!this.totalCount) {
+        this.isNotFound = true;
+        return;
+      }
+      this.isNotFound = false;
     },
   },
 };

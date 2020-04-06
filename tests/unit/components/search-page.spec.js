@@ -12,15 +12,23 @@ describe('SearchPage.vue', () => {
   });
 
   describe('methods', () => {
-    describe('initState()', () => {
-      it('Set to initial state', () => {
+    describe('showLoading()', () => {
+      it('Set isLoading to true', () => {
         wrapper.vm.$data.isLoading = false;
-        wrapper.vm.$data.isNotFound = true;
 
-        wrapper.vm.initState();
+        wrapper.vm.showLoading();
 
         expect(wrapper.vm.$data.isLoading).toBeTruthy();
-        expect(wrapper.vm.$data.isNotFound).toBeFalsy();
+      });
+    });
+
+    describe('hideLoading()', () => {
+      it('Set isLoading to false', () => {
+        wrapper.vm.$data.isLoading = true;
+
+        wrapper.vm.hideLoading();
+
+        expect(wrapper.vm.$data.isLoading).toBeFalsy();
       });
     });
 

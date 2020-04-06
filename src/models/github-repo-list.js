@@ -50,17 +50,17 @@ export default class GithubRepoList {
       });
   }
 
+  parseLinks(linkStr) {
+    this._urls = parseLinks(linkStr);
+    this.nextUrlChanged.execute();
+  }
+
   get all() {
     return this._all;
   }
 
   get totalCount() {
     return this._totalCount;
-  }
-
-  set totalCount(count) {
-    this._totalCount = count;
-    this.totalCountChanged.execute();
   }
 
   get nextUrl() {
@@ -71,13 +71,13 @@ export default class GithubRepoList {
     return this._error;
   }
 
+  set totalCount(count) {
+    this._totalCount = count;
+    this.totalCountChanged.execute();
+  }
+
   set error(err) {
     this._error = err;
     this.errorChanged.execute();
-  }
-
-  parseLinks(linkStr) {
-    this._urls = parseLinks(linkStr);
-    this.nextUrlChanged.execute();
   }
 }
