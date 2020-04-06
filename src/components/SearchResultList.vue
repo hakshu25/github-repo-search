@@ -14,7 +14,7 @@
         id="more-results-btn"
         v-bind:class="{ 'is-loading': isLoading }"
         class="button is-text is-large more-button bottom-gap"
-        v-show="results.length && isResultsMore"
+        v-show="isResultsMore"
         v-bind:disabled="isLoading"
         v-on:click="showMoreResults"
       >More...</button>
@@ -38,12 +38,12 @@ export default {
     isLoading: Boolean,
     isNotFound: Boolean,
     results: Array,
-    totalCount: Number,
+    nextUrl: String,
     error: String,
   },
   computed: {
     isResultsMore() {
-      if (this.results.length < this.totalCount) {
+      if (this.nextUrl) {
         return true;
       }
 

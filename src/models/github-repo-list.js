@@ -8,11 +8,9 @@ const MAX_COUNT = 30;
 export default class GithubRepoList {
   constructor() {
     this._all = [];
-    this._totalCount = 0;
     this._urls = {};
     this._error = null;
     this.listChanged = new Notify();
-    this.totalCountChanged = new Notify();
     this.nextUrlChanged = new Notify();
     this.errorChanged = new Notify();
   }
@@ -23,10 +21,10 @@ export default class GithubRepoList {
     await axios
       .get(requestUrl)
       .then((res) => {
-        this._all = res.data.items;
-        this.totalCount = res.data.total_count;
+        const data = res.data;
+        this._all = data.items;
         this.listChanged.execute();
-        if (this.totalCount > MAX_COUNT) {
+        if (data.total_count > MAX_COUNT) {
           this.parseLinks(res.headers.link);
         }
       })
@@ -59,21 +57,12 @@ export default class GithubRepoList {
     return this._all;
   }
 
-  get totalCount() {
-    return this._totalCount;
-  }
-
   get nextUrl() {
     return this._urls.next;
   }
 
   get error() {
     return this._error;
-  }
-
-  set totalCount(count) {
-    this._totalCount = count;
-    this.totalCountChanged.execute();
   }
 
   set error(err) {

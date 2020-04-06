@@ -19,7 +19,7 @@ describe('SearchResultList.vue', () => {
           wrapper = shallowMount(SearchResultList, {
             propsData: {
               results: [result],
-              totalCount: 2,
+              nextUrl: 'next-url',
               isLoading: false,
             },
           });
@@ -42,7 +42,7 @@ describe('SearchResultList.vue', () => {
             wrapper = shallowMount(SearchResultList, {
               propsData: {
                 results: [result],
-                totalCount: 2,
+                nextUrl: 'next-url',
                 isLoading: true,
               },
             });
@@ -65,7 +65,7 @@ describe('SearchResultList.vue', () => {
             wrapper = shallowMount(SearchResultList, {
               propsData: {
                 results: [result],
-                totalCount: 2,
+                nextUrl: 'next-url',
                 isLoading: false,
               },
             });
@@ -157,33 +157,22 @@ describe('SearchResultList.vue', () => {
         description: '',
       };
 
-      it('Return true if totalCount > results.length', () => {
+      it('Return true if there is nextUrl', () => {
         wrapper = shallowMount(SearchResultList, {
           propsData: {
             results: [result, result],
-            totalCount: 3,
+            nextUrl: 'next-url',
           },
         });
 
         expect(wrapper.vm.isResultsMore).toBeTruthy();
       });
 
-      it('Return false if totalCount === results.length', () => {
+      it('Return false if there is not nextUrl', () => {
         wrapper = shallowMount(SearchResultList, {
           propsData: {
             results: [result, result],
-            totalCount: 2,
-          },
-        });
-
-        expect(wrapper.vm.isResultsMore).toBeFalsy();
-      });
-
-      it('Return false if totalCount < results.length', () => {
-        wrapper = shallowMount(SearchResultList, {
-          propsData: {
-            results: [result, result],
-            totalCount: 1,
+            nextUrl: undefined,
           },
         });
 

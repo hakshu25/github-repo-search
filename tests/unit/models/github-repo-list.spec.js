@@ -27,16 +27,13 @@ describe('GithubRepoList', () => {
       };
       axios.get.mockImplementation(() => Promise.resolve(data));
       spyOn(githubRepoList.listChanged, 'execute');
-      spyOn(githubRepoList.totalCountChanged, 'execute');
       spyOn(githubRepoList.errorChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
       expect(githubRepoList.all).toEqual([item]);
-      expect(githubRepoList.totalCount).toBe(1);
       expect(githubRepoList.error).toBeNull();
       expect(githubRepoList.listChanged.execute).toHaveBeenCalled();
-      expect(githubRepoList.totalCountChanged.execute).toHaveBeenCalled();
       expect(githubRepoList.errorChanged.execute).not.toHaveBeenCalled();
     });
 
@@ -58,14 +55,11 @@ describe('GithubRepoList', () => {
         },
       };
       axios.get.mockImplementation(() => Promise.resolve(data));
-      spyOn(githubRepoList.totalCountChanged, 'execute');
       spyOn(githubRepoList.nextUrlChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
-      expect(githubRepoList.totalCount).toBe(31);
       expect(githubRepoList.nextUrl).toBe('http://example.com?page=2');
-      expect(githubRepoList.totalCountChanged.execute).toHaveBeenCalled();
       expect(githubRepoList.nextUrlChanged.execute).toHaveBeenCalled();
     });
 
@@ -86,14 +80,11 @@ describe('GithubRepoList', () => {
         },
       };
       axios.get.mockImplementation(() => Promise.resolve(data));
-      spyOn(githubRepoList.totalCountChanged, 'execute');
       spyOn(githubRepoList.nextUrlChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
-      expect(githubRepoList.totalCount).toBe(30);
       expect(githubRepoList.nextUrl).toEqual(undefined);
-      expect(githubRepoList.totalCountChanged.execute).toHaveBeenCalled();
       expect(githubRepoList.nextUrlChanged.execute).not.toHaveBeenCalled();
     });
 

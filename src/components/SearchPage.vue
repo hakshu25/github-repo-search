@@ -8,7 +8,7 @@
       v-bind:is-loading="isLoading"
       v-bind:is-not-found="isNotFound"
       v-bind:results="results"
-      v-bind:total-count="totalCount"
+      v-bind:next-url="nextUrl"
       v-bind:error="error"
       v-on:show-more="showMoreResults"
     ></SearchResultList>
@@ -29,9 +29,6 @@ export default {
     this.model.listChanged.observe(() => {
       this.results = this.model.all;
     });
-    this.model.totalCountChanged.observe(() => {
-      this.totalCount = this.model.totalCount;
-    });
     this.model.nextUrlChanged.observe(() => {
       this.nextUrl = this.model.nextUrl;
     });
@@ -42,7 +39,6 @@ export default {
   data() {
     return {
       results: this.model.all,
-      totalCount: this.model.totalCount,
       nextUrl: this.model.nextUrl,
       error: this.model.error,
       isLoading: false,
@@ -78,7 +74,7 @@ export default {
       this.isLoading = false;
     },
     setNotFound() {
-      if (!this.totalCount) {
+      if (!this.results.length) {
         this.isNotFound = true;
         return;
       }

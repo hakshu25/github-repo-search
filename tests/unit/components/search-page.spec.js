@@ -52,7 +52,6 @@ describe('SearchPage.vue', () => {
         await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.results).toEqual([item]);
-        expect(wrapper.vm.$data.totalCount).toEqual(1);
         expect(wrapper.vm.$data.isLoading).toBeFalsy();
         expect(wrapper.vm.$data.error).toBeNull();
         expect(wrapper.vm.$data.isNotFound).toBeFalsy();
@@ -71,7 +70,6 @@ describe('SearchPage.vue', () => {
         await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.nextUrl).toBeUndefined();
-        expect(wrapper.vm.$data.totalCount).toEqual(0);
         expect(wrapper.vm.$data.isLoading).toBeFalsy();
         expect(wrapper.vm.$data.error).toBeNull();
         expect(wrapper.vm.$data.isNotFound).toBeTruthy();
@@ -98,7 +96,6 @@ describe('SearchPage.vue', () => {
 
         await wrapper.vm.searchRepo('');
 
-        expect(wrapper.vm.$data.totalCount).toEqual(31);
         expect(wrapper.vm.$data.nextUrl).toEqual('http://example.com?page=2');
       });
 
@@ -122,7 +119,6 @@ describe('SearchPage.vue', () => {
 
         await wrapper.vm.searchRepo('');
 
-        expect(wrapper.vm.$data.totalCount).toEqual(30);
         expect(wrapper.vm.$data.nextUrl).toBeUndefined();
       });
 
