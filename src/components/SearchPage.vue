@@ -1,11 +1,8 @@
 <template>
   <div>
     <div class="bottom-gap">
-      <h2 class="title is-2">GitHub Repository Search</h2>
-      <SearchField
-        v-bind:is-loading="isLoading"
-        v-on:search-repo="searchRepo($event)"
-      ></SearchField>
+      <h2 class="title is-2">This GitHub Repository Search</h2>
+      <SearchField v-bind:is-loading="isLoading" v-on:search-repo="searchRepo($event)"></SearchField>
     </div>
     <SearchResultList
       v-bind:is-loading="isLoading"
