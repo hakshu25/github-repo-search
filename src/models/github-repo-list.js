@@ -35,6 +35,8 @@ export default class GithubRepoList {
   }
 
   async fetchNext() {
+    this.clearError();
+
     await axios
       .get(this.nextUrl)
       .then((res) => {
