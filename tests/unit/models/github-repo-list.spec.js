@@ -27,14 +27,14 @@ describe('GithubRepoList', () => {
       };
       axios.get.mockImplementation(() => Promise.resolve(data));
       spyOn(githubRepoList.listChanged, 'execute');
-      spyOn(githubRepoList.errorChanged, 'execute');
+      spyOn(githubRepoList.isErrorChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
       expect(githubRepoList.all).toEqual([item]);
-      expect(githubRepoList.error).toBeNull();
+      expect(githubRepoList.isError).toBeFalsy();
       expect(githubRepoList.listChanged.execute).toHaveBeenCalled();
-      expect(githubRepoList.errorChanged.execute).not.toHaveBeenCalled();
+      expect(githubRepoList.isErrorChanged.execute).not.toHaveBeenCalled();
     });
 
     it('Set paging link if there is next link', async () => {
@@ -88,14 +88,14 @@ describe('GithubRepoList', () => {
       expect(githubRepoList.nextUrlChanged.execute).not.toHaveBeenCalled();
     });
 
-    it('Set error message when error occurred', async () => {
+    it('Set error flag when error occurred', async () => {
       axios.get.mockImplementation(() => Promise.reject('ERROR MESSAGE'));
-      spyOn(githubRepoList.errorChanged, 'execute');
+      spyOn(githubRepoList.isErrorChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
-      expect(githubRepoList.error).toBe('ERROR MESSAGE');
-      expect(githubRepoList.errorChanged.execute).toHaveBeenCalled();
+      expect(githubRepoList.isError).toBeTruthy();
+      expect(githubRepoList.isErrorChanged.execute).toHaveBeenCalled();
     });
   });
 
@@ -137,26 +137,26 @@ describe('GithubRepoList', () => {
       axios.get.mockImplementation(() => Promise.resolve(data));
       spyOn(githubRepoList.listChanged, 'execute');
       spyOn(githubRepoList.nextUrlChanged, 'execute');
-      spyOn(githubRepoList.errorChanged, 'execute');
+      spyOn(githubRepoList.isErrorChanged, 'execute');
 
       await githubRepoList.fetchNext();
 
       expect(githubRepoList.all).toEqual([oldItem, item]);
       expect(githubRepoList.nextUrl).toEqual('http://example.com?page=2');
-      expect(githubRepoList.error).toBeNull();
+      expect(githubRepoList.isError).toBeFalsy();
       expect(githubRepoList.listChanged.execute).toHaveBeenCalled();
       expect(githubRepoList.nextUrlChanged.execute).toHaveBeenCalled();
-      expect(githubRepoList.errorChanged.execute).not.toHaveBeenCalled();
+      expect(githubRepoList.isErrorChanged.execute).not.toHaveBeenCalled();
     });
 
     it('Set error message when error occurred', async () => {
       axios.get.mockImplementation(() => Promise.reject('ERROR MESSAGE'));
-      spyOn(githubRepoList.errorChanged, 'execute');
+      spyOn(githubRepoList.isErrorChanged, 'execute');
 
       await githubRepoList.fetchNext();
 
-      expect(githubRepoList.error).toBe('ERROR MESSAGE');
-      expect(githubRepoList.errorChanged.execute).toHaveBeenCalled();
+      expect(githubRepoList.isError).toBeTruthy();
+      expect(githubRepoList.isErrorChanged.execute).toHaveBeenCalled();
     });
   });
 });

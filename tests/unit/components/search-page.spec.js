@@ -53,7 +53,7 @@ describe('SearchPage.vue', () => {
 
         expect(wrapper.vm.$data.results).toEqual([item]);
         expect(wrapper.vm.$data.isLoading).toBeFalsy();
-        expect(wrapper.vm.$data.error).toBeNull();
+        expect(wrapper.vm.$data.isError).toBeFalsy();
         expect(wrapper.vm.$data.isNotFound).toBeFalsy();
       });
 
@@ -71,7 +71,7 @@ describe('SearchPage.vue', () => {
 
         expect(wrapper.vm.$data.nextUrl).toBeUndefined();
         expect(wrapper.vm.$data.isLoading).toBeFalsy();
-        expect(wrapper.vm.$data.error).toBeNull();
+        expect(wrapper.vm.$data.isError).toBeFalsy();
         expect(wrapper.vm.$data.isNotFound).toBeTruthy();
       });
 
@@ -128,7 +128,7 @@ describe('SearchPage.vue', () => {
         await wrapper.vm.searchRepo('');
 
         expect(wrapper.vm.$data.isLoading).toBeFalsy();
-        expect(wrapper.vm.$data.error).not.toBeNull();
+        expect(wrapper.vm.$data.isError).toBeTruthy();
       });
     });
 

@@ -19,7 +19,7 @@
         v-on:click="showMoreResults"
       >More...</button>
     </nav>
-    <section id="error" v-if="error">
+    <section id="error" v-if="isError">
       <b-notification type="is-danger">{{ errorMessage }}</b-notification>
     </section>
   </div>
@@ -39,7 +39,7 @@ export default {
     isNotFound: Boolean,
     results: Array,
     nextUrl: String,
-    error: String,
+    isError: Boolean,
   },
   computed: {
     isResultsMore() {

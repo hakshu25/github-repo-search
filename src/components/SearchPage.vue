@@ -9,7 +9,7 @@
       v-bind:is-not-found="isNotFound"
       v-bind:results="results"
       v-bind:next-url="nextUrl"
-      v-bind:error="error"
+      v-bind:isError="isError"
       v-on:show-more="showMoreResults"
     ></SearchResultList>
   </div>
@@ -32,15 +32,15 @@ export default {
     this.model.nextUrlChanged.observe(() => {
       this.nextUrl = this.model.nextUrl;
     });
-    this.model.errorChanged.observe(() => {
-      this.error = this.model.error;
+    this.model.isErrorChanged.observe(() => {
+      this.isError = this.model.isError;
     });
   },
   data() {
     return {
       results: this.model.all,
       nextUrl: this.model.nextUrl,
-      error: this.model.error,
+      isError: this.model.isError,
       isLoading: false,
       isNotFound: false,
     };
@@ -52,7 +52,7 @@ export default {
         this.setNotFound();
       });
     },
-    error() {
+    isError() {
       this.$nextTick(() => {
         this.hideLoading();
       });

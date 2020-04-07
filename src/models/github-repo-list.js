@@ -9,14 +9,15 @@ export default class GithubRepoList {
   constructor() {
     this._all = [];
     this._urls = {};
-    this._error = null;
+    this._isError = false;
     this.listChanged = new Notify();
     this.nextUrlChanged = new Notify();
-    this.errorChanged = new Notify();
+    this.isErrorChanged = new Notify();
   }
 
   async fetchByKeyword(searchKeyword) {
-    this._error = null;
+    this.clearError();
+
     const requestUrl = `${apiUrl}?q=${searchKeyword}`;
     await axios
       .get(requestUrl)
@@ -29,8 +30,7 @@ export default class GithubRepoList {
         }
       })
       .catch((err) => {
-        console.error(err);
-        this.error = err;
+        this.dispatchError(err);
       });
   }
 
@@ -43,14 +43,23 @@ export default class GithubRepoList {
         this.parseLinks(res.headers.link);
       })
       .catch((err) => {
-        console.error(err);
-        this.error = err;
+        this.dispatchError(err);
       });
   }
 
   parseLinks(linkStr) {
     this._urls = parseLinks(linkStr);
     this.nextUrlChanged.execute();
+  }
+
+  clearError() {
+    this._isError = false;
+  }
+
+  dispatchError(err) {
+    console.error(err);
+    this._isError = true;
+    this.isErrorChanged.execute();
   }
 
   get all() {
@@ -61,12 +70,7 @@ export default class GithubRepoList {
     return this._urls.next;
   }
 
-  get error() {
-    return this._error;
-  }
-
-  set error(err) {
-    this._error = err;
-    this.errorChanged.execute();
+  get isError() {
+    return this._isError;
   }
 }

@@ -121,7 +121,7 @@ describe('SearchResultList.vue', () => {
           wrapper = shallowMount(SearchResultList, {
             propsData: {
               results: [],
-              error: 'ERROR',
+              isError: true,
             },
           });
         });
@@ -136,7 +136,7 @@ describe('SearchResultList.vue', () => {
           wrapper = shallowMount(SearchResultList, {
             propsData: {
               results: [],
-              error: null,
+              isError: false,
             },
           });
         });
