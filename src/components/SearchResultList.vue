@@ -17,7 +17,9 @@
         v-show="isResultsMore"
         v-bind:disabled="isLoading"
         v-on:click="showMoreResults"
-      >More...</button>
+      >
+        More...
+      </button>
     </nav>
     <section id="error" v-if="isError">
       <b-notification type="is-danger">{{ errorMessage }}</b-notification>
