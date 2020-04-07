@@ -18,10 +18,10 @@ jobs:
       - name: Install and Build
         run: |
           yarn --frozen-lockfile
-          yarn build
+          yarn build --dest docs
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BRANCH: master # The branch the action should deploy to.
+          BRANCH: gh-pages # The branch the action should deploy to.
           FOLDER: docs # The folder the action should deploy.
