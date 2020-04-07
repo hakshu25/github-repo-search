@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "buefy": "0.8.13",
+    "lodash": "4.17.15",
     "vue": "2.6.11"
   },
   "devDependencies": {
