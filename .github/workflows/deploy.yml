@@ -12,7 +12,7 @@ jobs:
         with:
           persist-credentials: false
       - name: setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: "12.x"
       - name: Install and Build
