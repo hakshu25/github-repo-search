@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@vue/compiler-sfc": "^3.0.5",
-    "buefy": "0.9.8",
     "lodash": "4.17.21",
     "vue": "^3.0.5"
   },
