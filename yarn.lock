@@ -1921,6 +1921,11 @@
   dependencies:
     "@types/yargs-parser" "*"
 
+"@vitejs/plugin-vue@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-1.1.4.tgz#1dd388519b75439b7733601b55238ca691864796"
+  integrity sha512-cUDILd++9jdhdjpuhgJofQqOabOKe+kTWTE2HQY2PBHEUO2fgwTurLE0cJg9UcIo1x4lHfsp+59S9TBCHgTZkw==
+
 "@vue/babel-helper-vue-jsx-merge-props@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@vue/babel-helper-vue-jsx-merge-props/-/babel-helper-vue-jsx-merge-props-1.2.1.tgz#31624a7a505fb14da1d58023725a4c5f270e6a81"
@@ -2889,8 +2894,8 @@ autoprefixer@^10.2.4:
 
 autoprefixer@^9.8.6:
   version "9.8.6"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.8.6.tgz#3b73594ca1bf9266320c5acf1588d74dea74210f"
-  integrity sha512-XrvP4VVHdRBCdX1S3WXVD8+RyG9qeb1D5Sn1DeLiG2xfSpzellk5k54xbUERJ3M5DggQxes39UGOTP8CFrEGbg==
+  resolved "https://registry.npm.taobao.org/autoprefixer/download/autoprefixer-9.8.6.tgz#3b73594ca1bf9266320c5acf1588d74dea74210f"
+  integrity sha1-O3NZTKG/kmYyDFrPFYjXTep0IQ8=
   dependencies:
     browserslist "^4.12.0"
     caniuse-lite "^1.0.30001109"
@@ -4827,6 +4832,11 @@ es-to-primitive@^1.2.1:
     is-callable "^1.1.4"
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
+
+esbuild@^0.8.34:
+  version "0.8.49"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.8.49.tgz#3d33f71b3966611f822cf4c838115f3fbd16def2"
+  integrity sha512-itiFVYv5UZz4NooO7/Y0bRGVDGz/M/cxKbl6zyNI5pnKaz1mZjvZXAFhhDVz6rGCmcdTKj5oag6rh8DaaSSmfQ==
 
 escalade@^3.1.1:
   version "3.1.1"
@@ -9645,6 +9655,13 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
+rollup@^2.38.5:
+  version "2.39.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.39.0.tgz#be4f98c9e421793a8fec82c854fb567c35e22ab6"
+  integrity sha512-+WR3bttcq7zE+BntH09UxaW3bQo3vItuYeLsyk4dL2tuwbeSKJuvwiawyhEnvRdRgrII0Uzk00FpctHO/zB1kw==
+  optionalDependencies:
+    fsevents "~2.3.1"
+
 rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.npm.taobao.org/rsvp/download/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"
@@ -11029,6 +11046,18 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+vite@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.0.1.tgz#348fc5c0de510aa90bd01ecf87df210ce741b38e"
+  integrity sha512-x7ZfikjNs+6n4cdvwb9L5r5xBCdjmtmHFHaI4JVR3nAkJbMCK/dynfDWky8/NseZ9Ncz1jVxTQ/Bcf+n1ps1Ww==
+  dependencies:
+    esbuild "^0.8.34"
+    postcss "^8.2.1"
+    resolve "^1.19.0"
+    rollup "^2.38.5"
+  optionalDependencies:
+    fsevents "~2.3.1"
 
 vm-browserify@^1.0.1:
   version "1.1.2"

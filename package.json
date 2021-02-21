@@ -17,6 +17,7 @@
     "vue": "^3.0.5"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^1.1.4",
     "@vue/cli-plugin-babel": "4.5.13",
     "@vue/cli-plugin-eslint": "4.5.13",
     "@vue/cli-plugin-unit-jest": "4.5.13",
@@ -35,6 +36,7 @@
     "prettier": "2.3.1",
     "sass": "1.35.1",
     "sass-loader": "10.2.0",
-    "tailwindcss": "^2.0.3"
+    "tailwindcss": "^2.0.3",
+    "vite": "^2.0.1"
   }
 }

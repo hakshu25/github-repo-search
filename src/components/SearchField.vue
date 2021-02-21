@@ -1,10 +1,6 @@
 <template>
   <div>
-    <input
-      placeholder="Search..."
-      type="text"
-      v-model="searchStr"
-    />
+    <input placeholder="Search..." type="text" v-model="searchStr" />
     <p class="control">
       <button
         id="search-btn"
