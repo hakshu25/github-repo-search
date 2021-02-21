@@ -1,25 +1,22 @@
 <template>
   <div>
-    <b-field grouped>
-      <b-input
-        placeholder="Search..."
-        type="search"
-        v-model="searchStr"
-        expanded
-      ></b-input>
-      <p class="control">
-        <button
-          id="search-btn"
-          v-bind:class="{ 'is-loading': isLoading }"
-          class="button is-info"
-          type="submit"
-          v-bind:disabled="!searchStr || isLoading"
-          v-on:click="searchRepo"
-        >
-          Search
-        </button>
-      </p>
-    </b-field>
+    <input
+      placeholder="Search..."
+      type="text"
+      v-model="searchStr"
+    />
+    <p class="control">
+      <button
+        id="search-btn"
+        v-bind:class="{ 'is-loading': isLoading }"
+        class="button is-info"
+        type="submit"
+        v-bind:disabled="!searchStr || isLoading"
+        v-on:click="searchRepo"
+      >
+        Search
+      </button>
+    </p>
   </div>
 </template>
 <script>

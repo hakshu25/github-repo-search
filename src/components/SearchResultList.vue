@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="title is-2" v-if="results.length">Results</h1>
-    <b-notification id="not-found" v-if="isNotFound">Not Found.</b-notification>
+    <div id="not-found" v-if="isNotFound">Not Found.</div>
     <SearchResultListItem
       class="media bottom-gap"
       v-for="(result, index) in results"
@@ -22,7 +22,7 @@
       </button>
     </nav>
     <section id="error" v-if="isError">
-      <b-notification type="is-danger">{{ errorMessage }}</b-notification>
+      <div class="is-danger">{{ errorMessage }}</div>
     </section>
   </div>
 </template>
