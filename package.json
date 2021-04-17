@@ -28,7 +28,7 @@
     "eslint-plugin-vue": "7.9.0",
     "fibers": "5.0.0",
     "prettier": "2.2.1",
-    "sass": "1.32.8",
+    "sass": "1.32.10",
     "sass-loader": "10.1.1",
     "vue-template-compiler": "2.6.12"
   }
