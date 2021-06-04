@@ -11,7 +11,7 @@
   "dependencies": {
     "buefy": "0.9.7",
     "lodash": "4.17.21",
-    "vue": "2.6.12"
+    "vue": "2.6.13"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "4.5.13",
@@ -30,6 +30,6 @@
     "prettier": "2.3.0",
     "sass": "1.34.1",
     "sass-loader": "10.2.0",
-    "vue-template-compiler": "2.6.12"
+    "vue-template-compiler": "2.6.13"
   }
 }
