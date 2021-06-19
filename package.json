@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "buefy": "0.9.7",
+    "buefy": "0.9.8",
     "lodash": "4.17.21",
     "vue": "2.6.14"
   },
