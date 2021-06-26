@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x, 14.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -21,4 +21,3 @@ jobs:
         yarn --frozen-lockfile
         yarn lint --no-fix
         yarn test:unit
-
