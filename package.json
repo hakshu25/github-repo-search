@@ -8,6 +8,9 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
+  "engines": {
+    "node": ">= 12.x"
+  },
   "dependencies": {
     "buefy": "0.9.8",
     "lodash": "4.17.21",
