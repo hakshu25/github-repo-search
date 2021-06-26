@@ -17,7 +17,7 @@ describe('SearchResultList.vue', () => {
       describe('click button', () => {
         beforeEach(() => {
           wrapper = shallowMount(SearchResultList, {
-            propsData: {
+            props: {
               results: [result],
               nextUrl: 'next-url',
               isLoading: false,
@@ -40,7 +40,7 @@ describe('SearchResultList.vue', () => {
 
           beforeEach(() => {
             wrapper = shallowMount(SearchResultList, {
-              propsData: {
+              props: {
                 results: [result],
                 nextUrl: 'next-url',
                 isLoading: true,
@@ -63,7 +63,7 @@ describe('SearchResultList.vue', () => {
 
           beforeEach(async () => {
             wrapper = shallowMount(SearchResultList, {
-              propsData: {
+              props: {
                 results: [result],
                 nextUrl: 'next-url',
                 isLoading: false,
@@ -87,7 +87,7 @@ describe('SearchResultList.vue', () => {
       describe('There are no results', () => {
         beforeEach(() => {
           wrapper = shallowMount(SearchResultList, {
-            propsData: {
+            props: {
               results: [],
               isNotFound: true,
             },
@@ -102,7 +102,7 @@ describe('SearchResultList.vue', () => {
       describe('There are results', () => {
         beforeEach(() => {
           wrapper = shallowMount(SearchResultList, {
-            propsData: {
+            props: {
               results: [],
               isNotFound: false,
             },
@@ -119,7 +119,7 @@ describe('SearchResultList.vue', () => {
       describe('There is an error', () => {
         beforeEach(() => {
           wrapper = shallowMount(SearchResultList, {
-            propsData: {
+            props: {
               results: [],
               isError: true,
             },
@@ -134,7 +134,7 @@ describe('SearchResultList.vue', () => {
       describe('There are no errors', () => {
         beforeEach(() => {
           wrapper = shallowMount(SearchResultList, {
-            propsData: {
+            props: {
               results: [],
               isError: false,
             },
@@ -159,7 +159,7 @@ describe('SearchResultList.vue', () => {
 
       it('Return true if there is nextUrl', () => {
         wrapper = shallowMount(SearchResultList, {
-          propsData: {
+          props: {
             results: [result, result],
             nextUrl: 'next-url',
           },
@@ -170,7 +170,7 @@ describe('SearchResultList.vue', () => {
 
       it('Return false if there is not nextUrl', () => {
         wrapper = shallowMount(SearchResultList, {
-          propsData: {
+          props: {
             results: [result, result],
             nextUrl: undefined,
           },

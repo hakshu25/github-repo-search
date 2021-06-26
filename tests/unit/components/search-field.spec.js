@@ -11,7 +11,7 @@ describe('SearchField.vue', () => {
 
         beforeEach(async () => {
           wrapper = shallowMount(SearchField, {
-            propsData: {
+            props: {
               isLoading: true,
             },
           });
@@ -34,7 +34,7 @@ describe('SearchField.vue', () => {
 
         beforeEach(async () => {
           wrapper = shallowMount(SearchField, {
-            propsData: {
+            props: {
               isLoading: false,
             },
           });
@@ -57,7 +57,7 @@ describe('SearchField.vue', () => {
   describe('search button', () => {
     beforeEach(async () => {
       wrapper = shallowMount(SearchField, {
-        propsData: {
+        props: {
           isLoading: false,
         },
       });
