@@ -1,25 +1,32 @@
 <template>
-  <div>
-    <b-field grouped>
-      <b-input
+  <div class="flex flex-wrap">
+    <div class="flex-grow">
+      <input
         placeholder="Search..."
-        type="search"
+        type="text"
         v-model="searchStr"
-        expanded
-      ></b-input>
-      <p class="control">
-        <button
-          id="search-btn"
-          v-bind:class="{ 'is-loading': isLoading }"
-          class="button is-info"
-          type="submit"
-          v-bind:disabled="!searchStr || isLoading"
-          v-on:click="searchRepo"
-        >
-          Search
-        </button>
-      </p>
-    </b-field>
+        class="border-gray-100 border-2 rounded h-10 w-full p-2"
+      />
+    </div>
+    <div class="flex-grow-0 ml-4">
+      <button
+        id="search-btn"
+        class="
+          h-10
+          bg-blue-400
+          text-white
+          py-2
+          px-6
+          rounded
+          disabled:opacity-50
+        "
+        type="submit"
+        v-bind:disabled="!searchStr || isLoading"
+        v-on:click="searchRepo"
+      >
+        Search
+      </button>
+    </div>
   </div>
 </template>
 <script>

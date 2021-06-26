@@ -1,28 +1,37 @@
 <template>
   <div>
-    <h1 class="title is-2" v-if="results.length">Results</h1>
-    <b-notification id="not-found" v-if="isNotFound">Not Found.</b-notification>
+    <h2 class="text-3xl ml-4 mb-3" v-if="results.length">Results</h2>
+    <div id="not-found" v-if="isNotFound">Not Found.</div>
     <SearchResultListItem
-      class="media bottom-gap"
+      class="mx-4 mb-4"
       v-for="(result, index) in results"
       v-bind:key="index"
       v-bind:result="result"
     ></SearchResultListItem>
-    <nav class="level-item has-text-centered">
+    <nav class="mx-4 mt-12 mb-8 text-center">
       <button
         type="button"
         id="more-results-btn"
-        v-bind:class="{ 'is-loading': isLoading }"
-        class="button is-text is-large more-button bottom-gap"
+        class="
+          text-black
+          w-full
+          h-10
+          bg-gray-100
+          border-gray-100 border-2
+          shadow-md
+          rounded-md
+          disabled:opacity-30
+          hover:opacity-70
+        "
         v-show="isResultsMore"
         v-bind:disabled="isLoading"
         v-on:click="showMoreResults"
       >
-        More...
+        More
       </button>
     </nav>
     <section id="error" v-if="isError">
-      <b-notification type="is-danger">{{ errorMessage }}</b-notification>
+      <div class="is-danger">{{ errorMessage }}</div>
     </section>
   </div>
 </template>

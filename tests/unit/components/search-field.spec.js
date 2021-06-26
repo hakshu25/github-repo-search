@@ -11,21 +11,17 @@ describe('SearchField.vue', () => {
 
         beforeEach(async () => {
           wrapper = shallowMount(SearchField, {
-            propsData: {
+            props: {
               isLoading: true,
             },
           });
-          wrapper.setData({ searchStr: 'TEST' });
+          await wrapper.setData({ searchStr: 'TEST' });
           await wrapper.vm.$forceUpdate();
           button = wrapper.find('#search-btn');
         });
 
-        it('there is class is-loading of button', () => {
-          expect(button.classes()).toContain('is-loading');
-        });
-
         it('disable button', () => {
-          expect(button.attributes().disabled).toBe('disabled');
+          expect(button.attributes().disabled).toBeDefined();
         });
       });
 
@@ -34,17 +30,13 @@ describe('SearchField.vue', () => {
 
         beforeEach(async () => {
           wrapper = shallowMount(SearchField, {
-            propsData: {
+            props: {
               isLoading: false,
             },
           });
-          wrapper.setData({ searchStr: 'TEST' });
+          await wrapper.setData({ searchStr: 'TEST' });
           await wrapper.vm.$forceUpdate();
           button = wrapper.find('#search-btn');
-        });
-
-        it('there is not class is-loading of button', () => {
-          expect(button.classes()).not.toContain('is-loading');
         });
 
         it('enable button', () => {
@@ -57,7 +49,7 @@ describe('SearchField.vue', () => {
   describe('search button', () => {
     beforeEach(async () => {
       wrapper = shallowMount(SearchField, {
-        propsData: {
+        props: {
           isLoading: false,
         },
       });

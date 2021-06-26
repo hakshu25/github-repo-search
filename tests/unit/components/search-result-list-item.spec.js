@@ -9,7 +9,7 @@ describe('SearchResultListItem.vue', () => {
     describe('There is a result', () => {
       beforeEach(() => {
         wrapper = shallowMount(SearchResultListItem, {
-          propsData: {
+          props: {
             result: {
               owner: {
                 avatar_url: 'avatar',

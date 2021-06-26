@@ -1,11 +1,7 @@
-import Vue from 'vue';
-import Buefy from 'buefy';
-import 'buefy/dist/buefy.css';
+import { createApp } from 'vue';
 import App from './App.vue';
+import './index.css';
+import './assets/tailwind.css';
 
-Vue.config.productionTip = false;
-Vue.use(Buefy);
-
-new Vue({
-  render: (h) => h(App),
-}).$mount('#app');
+const app = createApp(App);
+app.mount('#app');
