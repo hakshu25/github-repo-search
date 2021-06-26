@@ -8,17 +8,26 @@
       v-bind:key="index"
       v-bind:result="result"
     ></SearchResultListItem>
-    <nav class="level-item has-text-centered">
+    <nav class="mx-4 mt-12 mb-8 text-center">
       <button
         type="button"
         id="more-results-btn"
-        v-bind:class="{ 'is-loading': isLoading }"
-        class="button is-text is-large more-button bottom-gap"
+        class="
+          text-black
+          w-full
+          h-10
+          bg-gray-100
+          border-gray-100 border-2
+          shadow-md
+          rounded-md
+          disabled:opacity-30
+          hover:opacity-70
+        "
         v-show="isResultsMore"
         v-bind:disabled="isLoading"
         v-on:click="showMoreResults"
       >
-        More...
+        More
       </button>
     </nav>
     <section id="error" v-if="isError">
