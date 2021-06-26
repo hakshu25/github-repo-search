@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1 class="title is-2" v-if="results.length">Results</h1>
+    <h2 class="text-3xl ml-4 mb-3" v-if="results.length">Results</h2>
     <div id="not-found" v-if="isNotFound">Not Found.</div>
     <SearchResultListItem
-      class="media bottom-gap"
+      class="mx-4 mb-4"
       v-for="(result, index) in results"
       v-bind:key="index"
       v-bind:result="result"
