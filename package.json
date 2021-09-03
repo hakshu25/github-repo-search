@@ -36,7 +36,7 @@
     "prettier": "2.3.2",
     "sass": "1.38.2",
     "sass-loader": "12.1.0",
-    "tailwindcss": "2.2.8",
+    "tailwindcss": "2.2.9",
     "vite": "2.5.1",
     "vue-jest": "5.0.0-alpha.10"
   }
