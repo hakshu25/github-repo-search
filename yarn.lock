@@ -2117,10 +2117,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@vitejs/plugin-vue@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-1.7.0.tgz#88b95295a2d15da66157735a1432af595c18031c"
-  integrity sha512-aNa36roLdq58Ay7tQ70IEXnSGwobC1xaWk77/ZgLL7x+YeBkVsd1UkbFaKeIs6a5KkHbBGNxz6Kto+rW4wHs0g==
+"@vitejs/plugin-vue@1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-1.7.1.tgz#8b0fc87628425a8ab39798a023c652fcfc0619c9"
+  integrity sha512-ldKF153gyXMXT5ZNkzk05OUXO2rri9fEZE6YOs7WxmTPAGQkwhKtzayke+wXhP5AfRY/Svn71nUVHgJzLMrasg==
 
 "@vue/babel-helper-vue-jsx-merge-props@^1.2.1":
   version "1.2.1"
