@@ -17,7 +17,7 @@
     "vue": "3.2.18"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "1.9.1",
+    "@vitejs/plugin-vue": "1.9.2",
     "@vue/cli-plugin-babel": "4.5.13",
     "@vue/cli-plugin-eslint": "4.5.13",
     "@vue/cli-plugin-unit-jest": "4.5.13",
