@@ -12,9 +12,9 @@
     "node": ">= 12.x"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "3.2.23",
+    "@vue/compiler-sfc": "3.2.24",
     "lodash": "4.17.21",
-    "vue": "3.2.23"
+    "vue": "3.2.24"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "1.10.2",
