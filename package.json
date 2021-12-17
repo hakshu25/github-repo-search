@@ -37,7 +37,7 @@
     "sass": "1.45.0",
     "sass-loader": "12.4.0",
     "tailwindcss": "2.2.19",
-    "vite": "2.7.1",
+    "vite": "2.7.3",
     "vue-jest": "5.0.0-alpha.10"
   }
 }
