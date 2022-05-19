@@ -1,8 +1,14 @@
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
-import SearchPage from '@/components/SearchPage.vue';
+import SearchPage from '../../../src/components/SearchPage.vue';
 
-jest.mock('axios');
+vi.mock('axios', () => {
+  return {
+    default: {
+      get: vi.fn(),
+    },
+  };
+});
 
 describe('SearchPage.vue', () => {
   let wrapper;
@@ -47,7 +53,7 @@ describe('SearchPage.vue', () => {
           },
           headers: {},
         };
-        axios.get.mockImplementation(() => Promise.resolve(data));
+        axios.get.mockResolvedValue(data);
 
         await wrapper.vm.searchRepo('');
 
@@ -65,7 +71,7 @@ describe('SearchPage.vue', () => {
           },
           headers: {},
         };
-        axios.get.mockImplementation(() => Promise.resolve(data));
+        axios.get.mockResolvedValue(data);
 
         await wrapper.vm.searchRepo('');
 
@@ -88,11 +94,10 @@ describe('SearchPage.vue', () => {
             total_count: 31,
           },
           headers: {
-            link:
-              '<http://example.com?page=2>; rel="next", <http://example.com?page=3>; rel="last"',
+            link: '<http://example.com?page=2>; rel="next", <http://example.com?page=3>; rel="last"',
           },
         };
-        axios.get.mockImplementation(() => Promise.resolve(data));
+        axios.get.mockResolvedValue(data);
 
         await wrapper.vm.searchRepo('');
 
@@ -115,7 +120,7 @@ describe('SearchPage.vue', () => {
             link: 'none next result',
           },
         };
-        axios.get.mockImplementation(() => Promise.resolve(data));
+        axios.get.mockResolvedValue(data);
 
         await wrapper.vm.searchRepo('');
 
@@ -123,7 +128,7 @@ describe('SearchPage.vue', () => {
       });
 
       it('Set error message when error occurred', async () => {
-        axios.get.mockImplementation(() => Promise.reject('ERROR MESSAGE'));
+        axios.get.mockRejectedValue('ERROR MESSAGE');
 
         await wrapper.vm.searchRepo('');
 
@@ -134,7 +139,7 @@ describe('SearchPage.vue', () => {
 
     describe('showMoreResults()', () => {
       it('Call the method that displays the next search result', () => {
-        const spy = jest
+        const spy = vi
           .spyOn(wrapper.vm.model, 'fetchNext')
           .mockImplementation();
 
