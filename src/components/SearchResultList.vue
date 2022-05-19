@@ -12,17 +12,7 @@
       <button
         type="button"
         id="more-results-btn"
-        class="
-          text-black
-          w-full
-          h-10
-          bg-gray-100
-          border-gray-100 border-2
-          shadow-md
-          rounded-md
-          disabled:opacity-30
-          hover:opacity-70
-        "
+        class="text-black w-full h-10 bg-gray-100 border-gray-100 border-2 shadow-md rounded-md disabled:opacity-30 hover:opacity-70"
         v-show="isResultsMore"
         v-bind:disabled="isLoading"
         v-on:click="showMoreResults"

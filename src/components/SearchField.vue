@@ -11,15 +11,7 @@
     <div class="flex-grow-0 ml-4">
       <button
         id="search-btn"
-        class="
-          h-10
-          bg-blue-400
-          text-white
-          py-2
-          px-6
-          rounded
-          disabled:opacity-50
-        "
+        class="h-10 bg-blue-400 text-white py-2 px-6 rounded disabled:opacity-50"
         type="submit"
         v-bind:disabled="!searchStr || isLoading"
         v-on:click="searchRepo"
