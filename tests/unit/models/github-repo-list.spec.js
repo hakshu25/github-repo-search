@@ -1,7 +1,13 @@
 import axios from 'axios';
-import GithubRepoList from '@/models/github-repo-list';
+import GithubRepoList from '../../../src/models/github-repo-list';
 
-jest.mock('axios');
+vi.mock('axios', () => {
+  return {
+    default: {
+      get: vi.fn(),
+    },
+  };
+});
 
 describe('GithubRepoList', () => {
   let githubRepoList;
@@ -25,9 +31,9 @@ describe('GithubRepoList', () => {
         },
         headers: {},
       };
-      axios.get.mockImplementation(() => Promise.resolve(data));
-      spyOn(githubRepoList.listChanged, 'execute');
-      spyOn(githubRepoList.isErrorChanged, 'execute');
+      axios.get.mockResolvedValue(data);
+      vi.spyOn(githubRepoList.listChanged, 'execute');
+      vi.spyOn(githubRepoList.isErrorChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
@@ -50,12 +56,11 @@ describe('GithubRepoList', () => {
           total_count: 31,
         },
         headers: {
-          link:
-            '<http://example.com?page=2>; rel="next", <http://example.com?page=3>; rel="last"',
+          link: '<http://example.com?page=2>; rel="next", <http://example.com?page=3>; rel="last"',
         },
       };
-      axios.get.mockImplementation(() => Promise.resolve(data));
-      spyOn(githubRepoList.nextUrlChanged, 'execute');
+      axios.get.mockResolvedValue(data);
+      vi.spyOn(githubRepoList.nextUrlChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
@@ -79,8 +84,8 @@ describe('GithubRepoList', () => {
           link: 'none next result',
         },
       };
-      axios.get.mockImplementation(() => Promise.resolve(data));
-      spyOn(githubRepoList.nextUrlChanged, 'execute');
+      axios.get.mockResolvedValue(data);
+      vi.spyOn(githubRepoList.nextUrlChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
@@ -89,8 +94,8 @@ describe('GithubRepoList', () => {
     });
 
     it('Set error flag when error occurred', async () => {
-      axios.get.mockImplementation(() => Promise.reject('ERROR MESSAGE'));
-      spyOn(githubRepoList.isErrorChanged, 'execute');
+      axios.get.mockRejectedValue('ERROR MESSAGE');
+      vi.spyOn(githubRepoList.isErrorChanged, 'execute');
 
       await githubRepoList.fetchByKeyword('');
 
@@ -128,16 +133,15 @@ describe('GithubRepoList', () => {
           total_count: 2,
         },
         headers: {
-          link:
-            '<http://example.com?page=2>; rel="next", <http://example.com?page=3>; rel="last"',
+          link: '<http://example.com?page=2>; rel="next", <http://example.com?page=3>; rel="last"',
         },
       };
-      axios.get.mockImplementation(() => Promise.resolve(oldData));
+      axios.get.mockResolvedValue(oldData);
       await githubRepoList.fetchByKeyword('');
-      axios.get.mockImplementation(() => Promise.resolve(data));
-      spyOn(githubRepoList.listChanged, 'execute');
-      spyOn(githubRepoList.nextUrlChanged, 'execute');
-      spyOn(githubRepoList.isErrorChanged, 'execute');
+      axios.get.mockResolvedValue(data);
+      vi.spyOn(githubRepoList.listChanged, 'execute');
+      vi.spyOn(githubRepoList.nextUrlChanged, 'execute');
+      vi.spyOn(githubRepoList.isErrorChanged, 'execute');
 
       await githubRepoList.fetchNext();
 
@@ -150,8 +154,8 @@ describe('GithubRepoList', () => {
     });
 
     it('Set error message when error occurred', async () => {
-      axios.get.mockImplementation(() => Promise.reject('ERROR MESSAGE'));
-      spyOn(githubRepoList.isErrorChanged, 'execute');
+      axios.get.mockRejectedValue('ERROR MESSAGE');
+      vi.spyOn(githubRepoList.isErrorChanged, 'execute');
 
       await githubRepoList.fetchNext();
 

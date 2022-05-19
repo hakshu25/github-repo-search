@@ -21,8 +21,8 @@ describe('Notify', () => {
     it('Execute all handlers in list', () => {
       const handlerObj1 = { handler: () => {} };
       const handlerObj2 = { handler: () => {} };
-      spyOn(handlerObj1, 'handler');
-      spyOn(handlerObj2, 'handler');
+      vi.spyOn(handlerObj1, 'handler');
+      vi.spyOn(handlerObj2, 'handler');
       notify.observe(handlerObj1.handler);
       notify.observe(handlerObj2.handler);
 

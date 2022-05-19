@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import SearchField from '@/components/SearchField.vue';
+import SearchField from '../../../src/components/SearchField.vue';
 
 describe('SearchField.vue', () => {
   let wrapper;

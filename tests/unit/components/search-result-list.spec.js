@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
-import SearchResultList from '@/components/SearchResultList.vue';
+import SearchResultList from '../../../src/components/SearchResultList.vue';
 
 describe('SearchResultList.vue', () => {
   let wrapper;
