@@ -8,9 +8,6 @@
     "test:unit": "vitest run --coverage",
     "lint": "eslint src/**/*.{js,vue} tests/unit/**/*"
   },
-  "engines": {
-    "node": ">= 12.x"
-  },
   "dependencies": {
     "@vue/compiler-sfc": "3.2.29",
     "lodash": "4.17.21",
