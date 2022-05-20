@@ -21,68 +21,71 @@
 import SearchField from './SearchField.vue';
 import SearchResultList from './SearchResultList.vue';
 import GithubRepoList from '../models/github-repo-list';
+import { ref, watch } from 'vue';
 
 export default {
   components: {
     SearchField,
     SearchResultList,
   },
-  beforeCreate() {
-    this.model = new GithubRepoList();
-    this.model.listChanged.observe(() => {
-      this.results = this.model.all;
+  setup() {
+    const model = ref(new GithubRepoList());
+    const results = ref([]);
+    const nextUrl = ref(undefined);
+    const isError = ref(false);
+    const isLoading = ref(false);
+    const isNotFound = ref(false);
+
+    model.value.listChanged.observe(() => {
+      results.value = model.value.all;
     });
-    this.model.nextUrlChanged.observe(() => {
-      this.nextUrl = this.model.nextUrl;
+    model.value.nextUrlChanged.observe(() => {
+      nextUrl.value = model.value.nextUrl;
     });
-    this.model.isErrorChanged.observe(() => {
-      this.isError = this.model.isError;
+    model.value.isErrorChanged.observe(() => {
+      isError.value = model.value.isError;
     });
-  },
-  data() {
-    return {
-      results: this.model.all,
-      nextUrl: this.model.nextUrl,
-      isError: this.model.isError,
-      isLoading: false,
-      isNotFound: false,
+
+    const searchRepo = async (searchStr) => {
+      showLoading();
+      await model.value.fetchByKeyword(searchStr);
     };
-  },
-  watch: {
-    results() {
-      this.$nextTick(() => {
-        this.hideLoading();
-        this.setNotFound();
-      });
-    },
-    isError() {
-      this.$nextTick(() => {
-        this.hideLoading();
-      });
-    },
-  },
-  methods: {
-    async searchRepo(searchStr) {
-      this.showLoading();
-      await this.model.fetchByKeyword(searchStr);
-    },
-    showMoreResults() {
-      this.showLoading();
-      this.model.fetchNext();
-    },
-    showLoading() {
-      this.isLoading = true;
-    },
-    hideLoading() {
-      this.isLoading = false;
-    },
-    setNotFound() {
-      if (!this.results.length) {
-        this.isNotFound = true;
+    const showMoreResults = () => {
+      showLoading();
+      model.value.fetchNext();
+    };
+    const showLoading = () => {
+      isLoading.value = true;
+    };
+    const hideLoading = () => {
+      isLoading.value = false;
+    };
+
+    watch(results, () => {
+      hideLoading();
+
+      if (!results.value.length) {
+        isNotFound.value = true;
         return;
       }
-      this.isNotFound = false;
-    },
+      isNotFound.value = false;
+    });
+    watch(isError, () => {
+      hideLoading();
+    });
+
+    return {
+      model,
+      results,
+      nextUrl,
+      isError,
+      isLoading,
+      isNotFound,
+      searchRepo,
+      showMoreResults,
+      showLoading,
+      hideLoading,
+    };
   },
 };
 </script>
