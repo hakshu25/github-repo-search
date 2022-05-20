@@ -17,10 +17,10 @@
   "devDependencies": {
     "@babel/core": "^7.17.12",
     "@babel/eslint-parser": "^7.17.0",
+    "@testing-library/vue": "^6.4.2",
     "@vitejs/plugin-vue": "2.1.0",
     "@vue/eslint-config-prettier": "7.0.0",
     "@vue/eslint-config-standard": "6.1.0",
-    "@vue/test-utils": "2.0.0-rc.18",
     "autoprefixer": "10.4.2",
     "axios": "0.25.0",
     "babel-eslint": "10.1.0",

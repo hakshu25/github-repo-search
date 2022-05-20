@@ -10,7 +10,7 @@ vi.mock('axios', () => {
   };
 });
 
-describe('SearchPage.vue', () => {
+describe('SearchPage Component', () => {
   let wrapper;
 
   beforeEach(() => {
