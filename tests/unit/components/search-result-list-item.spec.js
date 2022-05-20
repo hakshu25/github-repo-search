@@ -1,38 +1,41 @@
-import { shallowMount } from '@vue/test-utils';
-import axios from 'axios';
+import { render } from '@testing-library/vue';
 import SearchResultListItem from '../../../src/components/SearchResultListItem.vue';
 
-describe('SearchResultListItem.vue', () => {
-  let wrapper;
+describe('SearchResultListItem Component', () => {
+  const result = {
+    owner: {
+      avatar_url: 'http://example.com/avatar',
+    },
+    html_url: 'http://example.com/html_url',
+    full_name: 'sample/repo',
+    description: 'desc',
+  };
 
-  describe('Display result', () => {
-    describe('There is a result', () => {
-      beforeEach(() => {
-        wrapper = shallowMount(SearchResultListItem, {
-          props: {
-            result: {
-              owner: {
-                avatar_url: 'avatar',
-              },
-              html_url: 'html_url',
-              full_name: 'sample/repo',
-              description: 'desc',
-            },
-          },
-        });
+  describe('アイテム表示', () => {
+    it('画像表示', () => {
+      const { getByRole } = render(SearchResultListItem, {
+        props: { result },
+      });
+      const img = getByRole('img');
+
+      expect(img).not.toBeNull();
+      expect(img.src).toBe('http://example.com/avatar');
+    });
+
+    it('リポジトリ名表示', () => {
+      const { getByRole } = render(SearchResultListItem, {
+        props: { result },
       });
 
-      it('show avatar image', () => {
-        expect(wrapper.find('#avatar-image').exists()).toBeTruthy();
+      expect(getByRole('link').textContent).toBe('sample/repo');
+    });
+
+    it('リポジトリ説明表示', () => {
+      const { getByText } = render(SearchResultListItem, {
+        props: { result },
       });
 
-      it('show repository name', () => {
-        expect(wrapper.find('#repo-name').text()).toBe('sample/repo');
-      });
-
-      it('show repository description', () => {
-        expect(wrapper.find('#description').text()).toBe('desc');
-      });
+      expect(getByText('desc')).not.toBeNull();
     });
   });
 });

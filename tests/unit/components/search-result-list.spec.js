@@ -1,174 +1,146 @@
-import { shallowMount } from '@vue/test-utils';
-import axios from 'axios';
+import { fireEvent, render } from '@testing-library/vue';
 import SearchResultList from '../../../src/components/SearchResultList.vue';
 
-describe('SearchResultList.vue', () => {
-  let wrapper;
+describe('SearchResultList Component', () => {
+  describe('もっと見るボタン', () => {
+    const result = {
+      owner: {},
+      html_url: '',
+      full_name: '',
+      description: '',
+    };
 
-  describe('template logic', () => {
-    describe('more results button', () => {
-      const result = {
-        owner: {},
-        html_url: '',
-        full_name: '',
-        description: '',
-      };
+    describe('表示切り替え', () => {
+      describe('表示結果がさらにある場合', () => {
+        it('ボタンを表示すること', () => {
+          const { queryByRole } = render(SearchResultList, {
+            props: {
+              results: [result, result],
+              nextUrl: 'next-url',
+            },
+          });
 
-      describe('click button', () => {
-        beforeEach(() => {
-          wrapper = shallowMount(SearchResultList, {
+          expect(queryByRole('button')).not.toBeNull();
+        });
+      });
+
+      describe('表示結果がこれ以上ない場合', () => {
+        it('ボタンを表示しないこと', () => {
+          const { queryByRole } = render(SearchResultList, {
+            props: {
+              results: [result],
+              nextUrl: undefined,
+            },
+          });
+
+          expect(queryByRole('button')).toBeNull();
+        });
+      });
+    });
+
+    describe('ボタンクリック時', () => {
+      it('イベントが実行されること', async () => {
+        const { getByRole, emitted } = render(SearchResultList, {
+          props: {
+            results: [result],
+            nextUrl: 'next-url',
+            isLoading: false,
+          },
+        });
+        const moreBtn = getByRole('button');
+        await fireEvent.click(moreBtn);
+        const showEvents = emitted()['show-more'];
+
+        expect(showEvents.length).toBe(1);
+        expect(showEvents[0]).toEqual([]);
+      });
+    });
+
+    describe('ローディング表示', () => {
+      describe('ローディング中の場合', () => {
+        it('ボタンが無効化されること', () => {
+          const { getByRole } = render(SearchResultList, {
+            props: {
+              results: [result],
+              nextUrl: 'next-url',
+              isLoading: true,
+            },
+          });
+          const moreBtn = getByRole('button');
+
+          expect(moreBtn.disabled).toBeTruthy();
+        });
+      });
+
+      describe('ローディングしていない場合', () => {
+        it('ボタンが有効化されていること', () => {
+          const { getByRole } = render(SearchResultList, {
             props: {
               results: [result],
               nextUrl: 'next-url',
               isLoading: false,
             },
           });
-        });
+          const moreBtn = getByRole('button');
 
-        it('Emit event', () => {
-          wrapper.find('#more-results-btn').trigger('click');
-          const events = wrapper.emitted('show-more');
-
-          expect(events.length).toBe(1);
-          expect(events[0]).toEqual([]);
-        });
-      });
-
-      describe('loading', () => {
-        describe('If isLoading is true', () => {
-          let button;
-
-          beforeEach(() => {
-            wrapper = shallowMount(SearchResultList, {
-              props: {
-                results: [result],
-                nextUrl: 'next-url',
-                isLoading: true,
-              },
-            });
-            button = wrapper.find('#more-results-btn');
-          });
-
-          it('disable button', () => {
-            expect(button.attributes().disabled).toBeDefined();
-          });
-        });
-
-        describe('If isLoading is false', () => {
-          let button;
-
-          beforeEach(async () => {
-            wrapper = shallowMount(SearchResultList, {
-              props: {
-                results: [result],
-                nextUrl: 'next-url',
-                isLoading: false,
-              },
-            });
-            button = wrapper.find('#more-results-btn');
-          });
-
-          it('enable button', () => {
-            expect(button.attributes().disabled).toBeUndefined();
-          });
-        });
-      });
-    });
-
-    describe('not found message', () => {
-      describe('There are no results', () => {
-        beforeEach(() => {
-          wrapper = shallowMount(SearchResultList, {
-            props: {
-              results: [],
-              isNotFound: true,
-            },
-          });
-        });
-
-        it('Show message', () => {
-          expect(wrapper.find('#not-found').exists()).toBeTruthy();
-        });
-      });
-
-      describe('There are results', () => {
-        beforeEach(() => {
-          wrapper = shallowMount(SearchResultList, {
-            props: {
-              results: [],
-              isNotFound: false,
-            },
-          });
-        });
-
-        it('Do not show message', () => {
-          expect(wrapper.find('#not-found').exists()).toBeFalsy();
-        });
-      });
-    });
-
-    describe('error message', () => {
-      describe('There is an error', () => {
-        beforeEach(() => {
-          wrapper = shallowMount(SearchResultList, {
-            props: {
-              results: [],
-              isError: true,
-            },
-          });
-        });
-
-        it('Show error message section', () => {
-          expect(wrapper.find('#error').exists()).toBeTruthy();
-        });
-      });
-
-      describe('There are no errors', () => {
-        beforeEach(() => {
-          wrapper = shallowMount(SearchResultList, {
-            props: {
-              results: [],
-              isError: false,
-            },
-          });
-        });
-
-        it('Do not show error message section', () => {
-          expect(wrapper.find('#error').exists()).toBeFalsy();
+          expect(moreBtn.disabled).toBeFalsy();
         });
       });
     });
   });
 
-  describe('computed', () => {
-    describe('isResultsMore()', () => {
-      const result = {
-        owner: {},
-        html_url: '',
-        full_name: '',
-        description: '',
-      };
-
-      it('Return true if there is nextUrl', () => {
-        wrapper = shallowMount(SearchResultList, {
+  describe('not found メッセージ', () => {
+    describe('表示するものが無い場合', () => {
+      it('メッセージを表示する', () => {
+        const { queryByText } = render(SearchResultList, {
           props: {
-            results: [result, result],
-            nextUrl: 'next-url',
+            results: [],
+            isNotFound: true,
           },
         });
 
-        expect(wrapper.vm.isResultsMore).toBeTruthy();
+        expect(queryByText('Not Found.')).not.toBeNull();
       });
+    });
 
-      it('Return false if there is not nextUrl', () => {
-        wrapper = shallowMount(SearchResultList, {
+    describe('表示するものがある場合', () => {
+      it('メッセージを表示しない', () => {
+        const { queryByText } = render(SearchResultList, {
           props: {
-            results: [result, result],
-            nextUrl: undefined,
+            results: [],
+            isNotFound: false,
           },
         });
 
-        expect(wrapper.vm.isResultsMore).toBeFalsy();
+        expect(queryByText('Not Found.')).toBeNull();
+      });
+    });
+  });
+
+  describe('エラーメッセージ', () => {
+    describe('エラーがある場合', () => {
+      it('エラーメッセージを表示すること', () => {
+        const { queryByText } = render(SearchResultList, {
+          props: {
+            results: [],
+            isError: true,
+          },
+        });
+
+        expect(queryByText(/error/)).not.toBeNull();
+      });
+    });
+
+    describe('エラーが無い場合', () => {
+      it('エラーメッセージを表示しないこと', () => {
+        const { queryByText } = render(SearchResultList, {
+          props: {
+            results: [],
+            isError: false,
+          },
+        });
+
+        expect(queryByText(/error/)).toBeNull();
       });
     });
   });

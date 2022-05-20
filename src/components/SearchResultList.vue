@@ -42,6 +42,11 @@ export default {
     nextUrl: String,
     isError: Boolean,
   },
+  data() {
+    return {
+      errorMessage,
+    };
+  },
   computed: {
     isResultsMore() {
       if (this.nextUrl) {

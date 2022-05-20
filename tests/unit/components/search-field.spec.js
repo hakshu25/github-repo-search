@@ -1,70 +1,53 @@
-import { shallowMount } from '@vue/test-utils';
+import { fireEvent, render } from '@testing-library/vue';
 import SearchField from '../../../src/components/SearchField.vue';
 
-describe('SearchField.vue', () => {
-  let wrapper;
-
-  describe('loading', () => {
-    describe('search button', () => {
-      describe('If isLoading is true', () => {
-        let button;
-
-        beforeEach(async () => {
-          wrapper = shallowMount(SearchField, {
-            props: {
-              isLoading: true,
-            },
-          });
-          await wrapper.setData({ searchStr: 'TEST' });
-          await wrapper.vm.$forceUpdate();
-          button = wrapper.find('#search-btn');
+describe('SearchField Component', () => {
+  describe('ローディング表示', () => {
+    describe('ローディング中の場合', () => {
+      it('検索ボタンが無効化されている', async () => {
+        const { getByRole } = render(SearchField, {
+          props: {
+            isLoading: true,
+          },
         });
-
-        it('disable button', () => {
-          expect(button.attributes().disabled).toBeDefined();
-        });
+        const searchTextInput = getByRole('textbox');
+        await fireEvent.update(searchTextInput, 'TEST');
+        expect(getByRole('button').disabled).toBeTruthy();
       });
+    });
 
-      describe('If isLoading is false', () => {
-        let button;
-
-        beforeEach(async () => {
-          wrapper = shallowMount(SearchField, {
-            props: {
-              isLoading: false,
-            },
-          });
-          await wrapper.setData({ searchStr: 'TEST' });
-          await wrapper.vm.$forceUpdate();
-          button = wrapper.find('#search-btn');
+    describe('ローディングしていない場合', () => {
+      it('検索ボタンが有効化されている', async () => {
+        const { getByRole } = render(SearchField, {
+          props: {
+            isLoading: false,
+          },
         });
-
-        it('enable button', () => {
-          expect(button.attributes().disabled).toBeUndefined();
-        });
+        const searchTextInput = getByRole('textbox');
+        await fireEvent.update(searchTextInput, 'TEST');
+        expect(getByRole('button').disabled).toBeFalsy();
       });
     });
   });
 
-  describe('search button', () => {
-    beforeEach(async () => {
-      wrapper = shallowMount(SearchField, {
+  describe('検索ボタン', () => {
+    it('ボタンをクリックするとイベントが発生すること', async () => {
+      const { getByRole, emitted } = render(SearchField, {
         props: {
           isLoading: false,
         },
       });
-      wrapper.setData({ searchStr: 'aaa' });
-      await wrapper.vm.$forceUpdate();
-    });
 
-    it('Emit event if click button', () => {
-      const button = wrapper.find('#search-btn');
+      const searchTextInput = getByRole('textbox');
+      await fireEvent.update(searchTextInput, 'aaa');
 
-      button.trigger('click');
-      const events = wrapper.emitted('search-repo');
+      const searchBtn = getByRole('button');
+      await fireEvent.click(searchBtn);
 
-      expect(events.length).toBe(1);
-      expect(events[0]).toEqual(['aaa']);
+      const searchEvents = emitted()['search-repo'];
+
+      expect(searchEvents.length).toBe(1);
+      expect(searchEvents[0]).toEqual(['aaa']);
     });
   });
 });
