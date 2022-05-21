@@ -18,10 +18,11 @@
   </div>
 </template>
 <script>
+import { ref, watch } from 'vue';
 import SearchField from './SearchField.vue';
 import SearchResultList from './SearchResultList.vue';
 import GithubRepoList from '../models/github-repo-list';
-import { ref, watch } from 'vue';
+import useLoading from '../composables/use-loading';
 
 export default {
   components: {
@@ -33,8 +34,9 @@ export default {
     const results = ref([]);
     const nextUrl = ref(undefined);
     const isError = ref(false);
-    const isLoading = ref(false);
     const isNotFound = ref(false);
+
+    const { isLoading, showLoading, hideLoading } = useLoading();
 
     model.value.listChanged.observe(() => {
       results.value = model.value.all;
@@ -53,12 +55,6 @@ export default {
     const showMoreResults = () => {
       showLoading();
       model.value.fetchNext();
-    };
-    const showLoading = () => {
-      isLoading.value = true;
-    };
-    const hideLoading = () => {
-      isLoading.value = false;
     };
 
     watch(results, () => {
