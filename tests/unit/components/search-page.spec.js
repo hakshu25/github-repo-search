@@ -20,21 +20,21 @@ describe('SearchPage Component', () => {
   describe('methods', () => {
     describe('showLoading()', () => {
       it('Set isLoading to true', () => {
-        wrapper.vm.$data.isLoading = false;
+        wrapper.vm.isLoading = false;
 
         wrapper.vm.showLoading();
 
-        expect(wrapper.vm.$data.isLoading).toBeTruthy();
+        expect(wrapper.vm.isLoading).toBeTruthy();
       });
     });
 
     describe('hideLoading()', () => {
       it('Set isLoading to false', () => {
-        wrapper.vm.$data.isLoading = true;
+        wrapper.vm.isLoading = true;
 
         wrapper.vm.hideLoading();
 
-        expect(wrapper.vm.$data.isLoading).toBeFalsy();
+        expect(wrapper.vm.isLoading).toBeFalsy();
       });
     });
 
@@ -57,10 +57,10 @@ describe('SearchPage Component', () => {
 
         await wrapper.vm.searchRepo('');
 
-        expect(wrapper.vm.$data.results).toEqual([item]);
-        expect(wrapper.vm.$data.isLoading).toBeFalsy();
-        expect(wrapper.vm.$data.isError).toBeFalsy();
-        expect(wrapper.vm.$data.isNotFound).toBeFalsy();
+        expect(wrapper.vm.results).toEqual([item]);
+        expect(wrapper.vm.isLoading).toBeFalsy();
+        expect(wrapper.vm.isError).toBeFalsy();
+        expect(wrapper.vm.isNotFound).toBeFalsy();
       });
 
       it('Set not found flag if there is no result', async () => {
@@ -75,10 +75,10 @@ describe('SearchPage Component', () => {
 
         await wrapper.vm.searchRepo('');
 
-        expect(wrapper.vm.$data.nextUrl).toBeUndefined();
-        expect(wrapper.vm.$data.isLoading).toBeFalsy();
-        expect(wrapper.vm.$data.isError).toBeFalsy();
-        expect(wrapper.vm.$data.isNotFound).toBeTruthy();
+        expect(wrapper.vm.nextUrl).toBeUndefined();
+        expect(wrapper.vm.isLoading).toBeFalsy();
+        expect(wrapper.vm.isError).toBeFalsy();
+        expect(wrapper.vm.isNotFound).toBeTruthy();
       });
 
       it('Set paging link if there is next link', async () => {
@@ -101,7 +101,7 @@ describe('SearchPage Component', () => {
 
         await wrapper.vm.searchRepo('');
 
-        expect(wrapper.vm.$data.nextUrl).toEqual('http://example.com?page=2');
+        expect(wrapper.vm.nextUrl).toEqual('http://example.com?page=2');
       });
 
       it('Does not set paging link if there are no next items', async () => {
@@ -124,7 +124,7 @@ describe('SearchPage Component', () => {
 
         await wrapper.vm.searchRepo('');
 
-        expect(wrapper.vm.$data.nextUrl).toBeUndefined();
+        expect(wrapper.vm.nextUrl).toBeUndefined();
       });
 
       it('Set error message when error occurred', async () => {
@@ -132,8 +132,8 @@ describe('SearchPage Component', () => {
 
         await wrapper.vm.searchRepo('');
 
-        expect(wrapper.vm.$data.isLoading).toBeFalsy();
-        expect(wrapper.vm.$data.isError).toBeTruthy();
+        expect(wrapper.vm.isLoading).toBeFalsy();
+        expect(wrapper.vm.isError).toBeTruthy();
       });
     });
 

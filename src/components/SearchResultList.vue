@@ -26,10 +26,8 @@
   </div>
 </template>
 <script>
+import { computed } from 'vue';
 import SearchResultListItem from './SearchResultListItem.vue';
-
-const errorMessage =
-  'An error occurred during communication. Please reload the page or check the communication environment';
 
 export default {
   components: {
@@ -42,24 +40,25 @@ export default {
     nextUrl: String,
     isError: Boolean,
   },
-  data() {
-    return {
-      errorMessage,
+  setup(props, { emit }) {
+    const errorMessage =
+      'An error occurred during communication. Please reload the page or check the communication environment';
+    const showMoreResults = () => {
+      emit('show-more');
     };
-  },
-  computed: {
-    isResultsMore() {
-      if (this.nextUrl) {
+    const isResultsMore = computed(() => {
+      if (props.nextUrl) {
         return true;
       }
 
       return false;
-    },
-  },
-  methods: {
-    showMoreResults() {
-      this.$emit('show-more');
-    },
+    });
+
+    return {
+      errorMessage,
+      showMoreResults,
+      isResultsMore,
+    };
   },
 };
 </script>

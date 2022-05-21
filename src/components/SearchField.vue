@@ -22,18 +22,20 @@
   </div>
 </template>
 <script>
+import { ref } from 'vue';
 export default {
-  props: { isLoading: Boolean },
-  data() {
+  setup(_, { emit }) {
+    const searchStr = ref('');
+    const searchRepo = () => {
+      emit('search-repo', searchStr.value);
+    };
+
     return {
-      searchStr: '',
+      searchStr,
+      searchRepo,
     };
   },
-  methods: {
-    searchRepo() {
-      this.$emit('search-repo', this.searchStr);
-    },
-  },
+  props: { isLoading: Boolean },
 };
 </script>
 <style lang="scss" scoped></style>
