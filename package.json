@@ -7,6 +7,8 @@
     "build": "vite build",
     "test:unit": "vitest run --coverage",
     "lint": "eslint src/**/*.{js,vue} tests/unit/**/*",
+    "format": "prettier --write src/**/*.{js,vue} tests/**/*",
+    "format:check": "prettier --check src/**/*.{js,vue} tests/**/*",
     "prepare": "husky install"
   },
   "dependencies": {

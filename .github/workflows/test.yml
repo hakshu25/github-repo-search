@@ -22,4 +22,5 @@ jobs:
         run: |
           yarn --frozen-lockfile
           yarn lint
+          yarn format:check
           yarn test:unit
