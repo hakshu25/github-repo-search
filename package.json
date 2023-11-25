@@ -13,9 +13,9 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "3.3.8",
+    "@vue/compiler-sfc": "3.3.9",
     "lodash": "4.17.21",
-    "vue": "3.3.8"
+    "vue": "3.3.9"
   },
   "devDependencies": {
     "@babel/core": "^7.17.12",
