@@ -10,9 +10,9 @@
     <SearchResultList
       v-bind:is-loading="isLoading"
       v-bind:is-not-found="isNotFound"
-      v-bind:results="results"
+      v-bind:results
       v-bind:next-url="nextUrl"
-      v-bind:isError="isError"
+      v-bind:isError
       v-on:show-more="showMoreResults"
     ></SearchResultList>
   </div>

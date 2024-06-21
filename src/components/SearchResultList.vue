@@ -6,7 +6,7 @@
       class="mx-4 mb-4"
       v-for="(result, index) in results"
       v-bind:key="index"
-      v-bind:result="result"
+      v-bind:result
     ></SearchResultListItem>
     <nav class="mx-4 mt-12 mb-8 text-center">
       <button
