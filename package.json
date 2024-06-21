@@ -10,7 +10,7 @@
     "lint": "eslint src/**/*.{js,vue} tests/unit/**/*",
     "format": "prettier --write src/**/*.{js,vue} tests/**/*",
     "format:check": "prettier --check src/**/*.{js,vue} tests/**/*",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@vue/compiler-sfc": "3.3.13",
