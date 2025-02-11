@@ -1,17 +1,17 @@
 <template>
   <div class="flex flex-wrap">
-    <div class="flex-grow">
+    <div class="grow">
       <input
         placeholder="Search..."
         type="text"
         v-model="searchStr"
-        class="border-gray-100 border-2 rounded h-10 w-full p-2"
+        class="border-gray-100 border-2 rounded-sm h-10 w-full p-2"
       />
     </div>
-    <div class="flex-grow-0 ml-4">
+    <div class="grow-0 ml-4">
       <button
         id="search-btn"
-        class="h-10 bg-blue-400 text-white py-2 px-6 rounded disabled:opacity-50"
+        class="h-10 bg-blue-400 text-white py-2 px-6 rounded-sm disabled:opacity-50"
         type="submit"
         v-bind:disabled="!searchStr || isLoading"
         v-on:click="searchRepo"
