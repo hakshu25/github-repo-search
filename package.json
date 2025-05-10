@@ -37,7 +37,7 @@
     "prettier": "3.5.3",
     "sass": "1.87.0",
     "tailwindcss": "^4.0.0",
-    "vite": "6.3.4",
+    "vite": "6.3.5",
     "vitest": "^3.0.0"
   },
   "lint-staged": {
