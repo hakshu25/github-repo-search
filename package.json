@@ -13,9 +13,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "3.5.17",
+    "@vue/compiler-sfc": "3.5.18",
     "lodash": "4.17.21",
-    "vue": "3.5.17"
+    "vue": "3.5.18"
   },
   "devDependencies": {
     "@babel/core": "^7.17.12",
